@@ -1,0 +1,34 @@
+<h1 class="mat-h1">Checkout Buffer</h1>
+
+<div fxLayout="row" fxLayoutGap="12px">
+  <mat-card fxFlex="50">
+    <mat-card-title>POS Items</mat-card-title>
+    <mat-list>
+      <mat-list-item *ngFor="let message of posReadings ">
+        <mat-icon color="primary" matListIcon>attach_money</mat-icon>
+        <h3 matLine>Device: {{message.device}} </h3>
+        <p matLine>
+          <span> Action: {{message.name}} </span>
+        </p>
+        <p matLine>
+          <span> Value: {{message.value}} </span>
+        </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+  <mat-card fxFlex="50">
+    <mat-card-title>Scale Items</mat-card-title>
+    <mat-list>
+      <mat-list-item *ngFor="let message of scaleReadings ">
+        <mat-icon color="primary" matListIcon>fitness_center</mat-icon>
+        <h3 matLine>Device: {{message.device}} </h3>
+        <p matLine>
+            <span> Action: {{message.name}} </span>
+          </p>
+          <p matLine>
+            <span> Value: {{message.value}} </span>
+          </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+</div>
