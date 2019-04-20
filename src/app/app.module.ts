@@ -10,13 +10,17 @@ import { MatButtonModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule,
 import { TheftDetectionComponent } from './theft-detection/theft-detection.component';
 import { BufferService } from './services/buffer.service';
 import { WebsocketService } from './services/websocket.service';
+import { BleComponent } from './ble/ble.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TheftDetectionComponent
+    TheftDetectionComponent,
+    BleComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

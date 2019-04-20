@@ -1,0 +1,26 @@
+<h1 class="mat-h1">Checkout Buffer</h1>
+
+<div fxLayout="row" fxLayoutGap="12px">
+  <mat-card fxFlex="100">
+    <mat-card-title-group>
+      <mat-card-title>BLE Devices</mat-card-title>
+      <button mat-flat-button color="primary" (click)="connect(bleDevices[0].value)">GET TEMPS</button>
+
+    </mat-card-title-group>
+
+
+    <mat-list>
+      <mat-list-item *ngFor="let message of bleDevices">
+        <mat-icon color="primary" matListIcon>attach_money</mat-icon>
+        <h3 matLine>Device: {{message.device}} </h3>
+        <p matLine>
+          <span> Action: {{message.name}} </span>
+        </p>
+        <p matLine>
+          <span> Value: {{message.value}} </span>
+        </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+
+</div>
