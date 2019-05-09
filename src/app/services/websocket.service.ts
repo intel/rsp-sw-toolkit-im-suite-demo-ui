@@ -1,36 +1,35 @@
-import { Injectable } from "@angular/core";
-import { Subject, Observable, Observer } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
+import * as socketIo from 'socket.io-client';
+import { Socket } from '../shared/interfaces';
+
+declare var io: {
+  connect(url: string): Socket;
+};
 
 @Injectable()
 export class WebsocketService {
+
   constructor() { }
 
-  private subject: Subject<MessageEvent>;
+  socket: Socket;
+  observer: Observer<any>;
 
-  public connect(url): Subject<MessageEvent> {
-    if (!this.subject) {
-      this.subject = this.create(url);
-      console.log("Successfully connected: " + url);
-    }
-    return this.subject;
-  }
+  getQuotes(): Observable<any> {
+    this.socket = socketIo('http://localhost:8080');
 
-  private create(url): Subject<MessageEvent> {
-    let ws = new WebSocket(url);
-
-    let observable = Observable.create((obs: Observer<MessageEvent>) => {
-      ws.onmessage = obs.next.bind(obs);
-      ws.onerror = obs.error.bind(obs);
-      ws.onclose = obs.complete.bind(obs);
-      return ws.close.bind(ws);
+    this.socket.on('data', (res) => {
+      this.observer.next(res.data);
     });
-    let observer = {
-      next: (data: Object) => {
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(data));
-        }
-      }
-    };
-    return Subject.create(observer, observable);
+
+    return this.createObservable();
   }
+
+  createObservable(): Observable<any> {
+    return new Observable<any>(observer => {
+
+      this.observer = observer;
+    });
+  }
+
 }

@@ -1,34 +1,38 @@
-<h1 class="mat-h1">Checkout Buffer</h1>
+<h1 class="mat-h1">Checkout Dashboard</h1>
 
 <div fxLayout="row" fxLayoutGap="12px">
-  <mat-card fxFlex="50">
+  <mat-card fxFlex="60">
     <mat-card-title>POS Items</mat-card-title>
-    <mat-list>
-      <mat-list-item *ngFor="let message of posReadings ">
+    <mat-list [style.overflow]="'auto'" [style.height.px]="'600'" [style.padding.px]="5">
+      <mat-list-item *ngFor="let posItem of posReadings" [ngClass]="{'unreconciled': posItem.reconciled != true}">
         <mat-icon color="primary" matListIcon>attach_money</mat-icon>
-        <h3 matLine>Device: {{message.device}} </h3>
+        <h3 matLine>Device: {{posItem.product_name}} </h3>
         <p matLine>
-          <span> Action: {{message.name}} </span>
+          <span>Quantity: {{posItem.quantity}} </span>
         </p>
         <p matLine>
-          <span> Value: {{message.value}} </span>
+          <span> Unit Price: {{posItem.unit_price}} </span>
+        </p>
+        <p matLine>
+          <span [ngClass]="{'bold': posItem.reconciled != true}">
+            Reconciled: {{posItem.reconciled}}
+          </span>
         </p>
       </mat-list-item>
     </mat-list>
   </mat-card>
-  <mat-card fxFlex="50">
-    <mat-card-title>Scale Items</mat-card-title>
+  <mat-card fxFlex="40" [style.overflow]="'auto'" [style.height.px]="'160'">
+    <mat-card-title>Scale Information</mat-card-title>
     <mat-list>
-      <mat-list-item *ngFor="let message of scaleReadings ">
-        <mat-icon color="primary" matListIcon>fitness_center</mat-icon>
-        <h3 matLine>Device: {{message.device}} </h3>
+      <mat-list-item>
+        <mat-icon color="primary" matListIcon>how_to_vote</mat-icon>
+        <h3 matLine>Scale ID: {{scaleReading.scale_id}} </h3>
+        <h3 matLine>Status: {{scaleReading.status}} </h3>
         <p matLine>
-            <span> Action: {{message.name}} </span>
-          </p>
-          <p matLine>
-            <span> Value: {{message.value}} </span>
-          </p>
+          <span>Total Weight: {{ scaleTotal }} {{ scaleUnit }} </span>
+        </p>
       </mat-list-item>
     </mat-list>
   </mat-card>
+
 </div>

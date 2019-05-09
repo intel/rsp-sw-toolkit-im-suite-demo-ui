@@ -11,16 +11,7 @@ const endpoint = 'http://localhost:48082/api/v1/device/name/device-ble';
 @Injectable()
 export class BufferService {
   public messages: Subject<any>;
-  constructor(wsService: WebsocketService, public httpClient: HttpClient) {
-    const x = wsService.connect(websocketURL);
-    this.messages = x.pipe(
-      map((response: MessageEvent): any => {
-        const data = JSON.parse(response.data);
-        return data;
-      })
-    ) as Subject<any>;
-
-  }
+  constructor(wsService: WebsocketService, public httpClient: HttpClient) { }
   connectToDevice(uuid: string) {
     const x = this.httpClient.get(endpoint).pipe(
       map(this.extractData),
