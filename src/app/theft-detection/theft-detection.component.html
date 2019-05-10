@@ -6,7 +6,7 @@
     <mat-list [style.overflow]="'auto'" [style.height.px]="'600'" [style.padding.px]="5">
       <mat-list-item *ngFor="let posItem of posReadings" [ngClass]="{'unreconciled': posItem.reconciled != true}">
         <mat-icon color="primary" matListIcon>attach_money</mat-icon>
-        <h3 matLine>Device: {{posItem.product_name}} </h3>
+        <h3 matLine>Product Name: {{posItem.product_name}} </h3>
         <p matLine>
           <span>Quantity: {{posItem.quantity}} </span>
         </p>
