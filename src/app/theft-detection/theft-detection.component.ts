@@ -13,7 +13,6 @@ interface posItem {
 }
 interface scaleItem {
   scale_id: string;
-  status: string;
   total: string;
   units: string;
 }
