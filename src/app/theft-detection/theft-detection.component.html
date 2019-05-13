@@ -25,12 +25,10 @@
     <mat-card-title>Scale Information</mat-card-title>
     <mat-list>
       <mat-list-item>
-        <mat-icon color="primary" matListIcon>how_to_vote</mat-icon>
-        <h3 matLine>Scale ID: {{scaleReading.scale_id}} </h3>
-        <h3 matLine>Status: {{scaleReading.status}} </h3>
-        <p matLine>
-          <span>Total Weight: {{ scaleTotal }} {{ scaleUnit }} </span>
-        </p>
+        <mat-icon color="primary" class="scale-icon" matListIcon>how_to_vote</mat-icon>
+        <h1 size matLine>
+          <font size="+2">Total Weight: {{ scaleTotal }} {{ scaleUnit }}</font>
+        </h1>
       </mat-list-item>
     </mat-list>
   </mat-card>

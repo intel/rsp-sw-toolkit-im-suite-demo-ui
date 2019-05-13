@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 
 
 interface posItem {
+  product_id: string;
   product_name: string;
   quantity: number;
   quantity_unit: string;
@@ -43,12 +44,16 @@ export class TheftDetectionComponent implements OnInit {
   ngOnInit() {
     this.sub = this.websocketService.getDataSub()
       .subscribe(
-
         (message) => {
           console.log(message)
           message = JSON.stringify(message);
 
           let obj: data = JSON.parse(message) as data;
+
+          obj.POS_items.forEach((item, index) => {
+            if (item.product_id === "") { obj.POS_items.splice(index, 1); }
+          });
+
 
           this.scaleTotal = obj.SCALE_item.total;
           this.scaleUnit = obj.SCALE_item.units
