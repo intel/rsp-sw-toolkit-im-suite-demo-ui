@@ -62,7 +62,6 @@ export class TheftDetectionComponent implements OnInit {
           if (obj.hasOwnProperty('SCALE_item')) {
             this.scaleReading = obj.SCALE_item;
           } else {
-            console.log("Expecting failure here")
             this.scaleReading = { total: "0", units: "" } as scaleItem
           }
 
