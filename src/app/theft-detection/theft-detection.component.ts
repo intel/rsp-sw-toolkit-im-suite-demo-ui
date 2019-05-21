@@ -65,8 +65,8 @@ export class TheftDetectionComponent implements OnInit {
             this.scaleReading = { total: "0", units: "" } as scaleItem
           }
 
-          this.scaleTotal = obj.SCALE_item.total;
-          this.scaleUnit = obj.SCALE_item.units
+          this.scaleTotal = this.scaleReading.total;
+          this.scaleUnit = this.scaleReading.units
           this.posReadings = obj.POS_items;
           this.suspectItems = obj.SUSPECT_items;
         },
