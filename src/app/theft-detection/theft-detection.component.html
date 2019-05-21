@@ -24,16 +24,43 @@
       </mat-list-item>
     </mat-list>
   </mat-card>
-  <mat-card fxFlex="40" [style.overflow]="'auto'" [style.height.px]="'160'">
-    <mat-card-title>Scale Information</mat-card-title>
-    <mat-list>
-      <mat-list-item>
-        <mat-icon color="primary" class="scale-icon" matListIcon>how_to_vote</mat-icon>
-        <h1 size matLine>
-          <font size="+2">Total Weight: {{ scaleTotal }} {{ scaleUnit }}</font>
-        </h1>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
+
+  <div fxLayout="column" fxLayoutGap="12px">
+
+    <mat-card fxFlex="20" [style.overflow]="'auto'" [style.height.px]="'160'">
+      <mat-card-title>Scale Information</mat-card-title>
+      <mat-list>
+        <mat-list-item>
+          <mat-icon color="primary" class="scale-icon" matListIcon>how_to_vote</mat-icon>
+          <h1 size matLine>
+            <font size="+2">Total Weight: {{ scaleTotal }} {{ scaleUnit }}</font>
+          </h1>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+
+    <mat-card fxFlex="80">
+      <mat-card-title>Suspect Items</mat-card-title>
+      <mat-list [style.overflow]="'auto'" [style.height.px]="'600'" [style.padding.px]="5">
+        <mat-list-item *ngFor="let suspect of suspectItems">
+          <mat-icon color="primary" matListIcon>attach_money</mat-icon>
+          <h3 matLine>Product Name: {{suspect.product_name}} </h3>
+          <p matLine>
+            <span>Event Time: {{suspect.event_time}} </span>
+          </p>
+          <p matLine>
+            <span>Item Weight: {{suspect.delta}} </span>
+          </p>
+          <p matLine>
+            <span> Unit: {{suspect.units}} </span>
+          </p>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+
+
+  </div>
+
+
 
 </div>

@@ -15,11 +15,14 @@ interface posItem {
 interface scaleItem {
   scale_id: string;
   total: string;
+  delta: string;
+  event_time: string;
   units: string;
 }
 interface data {
   POS_items: Array<posItem>;
   SCALE_item: scaleItem;
+  SUSPECT_items: Array<scaleItem>;
 }
 
 @Component({
@@ -30,14 +33,16 @@ interface data {
 export class TheftDetectionComponent implements OnInit {
 
   posReadings: posItem[]
+  suspectItems: scaleItem[]
   scaleReading: scaleItem
   scaleTotal: any;
   scaleUnit: any;
 
   sub: Subscription;
 
-  constructor(private chatService: BufferService, private websocketService: WebsocketService) {
+  constructor(private websocketService: WebsocketService) {
     this.posReadings = []
+    this.suspectItems = []
     this.scaleReading = {} as scaleItem
   }
 
@@ -54,15 +59,15 @@ export class TheftDetectionComponent implements OnInit {
             if (item.product_id === "") { obj.POS_items.splice(index, 1); }
           });
 
-
           this.scaleTotal = obj.SCALE_item.total;
           this.scaleUnit = obj.SCALE_item.units
-
           this.posReadings = obj.POS_items;
+          this.suspectItems = obj.SUSPECT_items;
 
           if (obj.hasOwnProperty('SCALE_item')) {
             this.scaleReading = obj.SCALE_item;
           } else {
+            console.log("Expecting failure here")
             this.scaleReading = { total: "0" } as scaleItem
           }
         },
