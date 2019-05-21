@@ -25,7 +25,7 @@
     </mat-list>
   </mat-card>
 
-  <div fxLayout="column" fxLayoutGap="12px">
+  <div fxLayout="column" fxLayoutGap="12px" fxFlex="60">
 
     <mat-card fxFlex="20" [style.overflow]="'auto'" [style.height.px]="'160'">
       <mat-card-title>Scale Information</mat-card-title>
@@ -43,7 +43,7 @@
       <mat-card-title>Suspect Items</mat-card-title>
       <mat-list [style.overflow]="'auto'" [style.height.px]="'600'" [style.padding.px]="5">
         <mat-list-item *ngFor="let suspect of suspectItems">
-          <mat-icon color="primary" matListIcon>attach_money</mat-icon>
+          <mat-icon color="primary" matListIcon>how_to_vote</mat-icon>
           <h3 matLine>Product Name: {{suspect.product_name}} </h3>
           <p matLine>
             <span>Event Time: {{suspect.event_time}} </span>
