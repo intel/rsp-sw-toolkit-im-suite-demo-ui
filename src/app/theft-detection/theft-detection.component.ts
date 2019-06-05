@@ -20,9 +20,9 @@ interface scaleItem {
   units: string;
 }
 interface data {
-  POS_items: Array<posItem>;
-  SCALE_item: scaleItem;
-  SUSPECT_items: Array<scaleItem>;
+  positems: Array<posItem>;
+  scaleitem: scaleItem;
+  suspectitems: Array<scaleItem>;
 }
 
 @Component({
@@ -55,20 +55,20 @@ export class TheftDetectionComponent implements OnInit {
 
           let obj: data = JSON.parse(message) as data;
 
-          obj.POS_items.forEach((item, index) => {
-            if (item.product_id === "") { obj.POS_items.splice(index, 1); }
+          obj.positems.forEach((item, index) => {
+            if (item.product_id === "") { obj.positems.splice(index, 1); }
           });
 
-          if (obj.hasOwnProperty('SCALE_item')) {
-            this.scaleReading = obj.SCALE_item;
+          if (obj.hasOwnProperty('scaleitem')) {
+            this.scaleReading = obj.scaleitem;
           } else {
             this.scaleReading = { total: "0", units: "" } as scaleItem
           }
 
           this.scaleTotal = this.scaleReading.total;
           this.scaleUnit = this.scaleReading.units
-          this.posReadings = obj.POS_items;
-          this.suspectItems = obj.SUSPECT_items;
+          this.posReadings = obj.positems;
+          this.suspectItems = obj.suspectitems;
         },
         (err) => console.error(err),
         () => console.warn('Completed!')
