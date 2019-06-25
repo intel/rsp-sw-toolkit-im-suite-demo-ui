@@ -1,0 +1,25 @@
+<h1 class="mat-h1">RFID Controller Commands</h1>
+
+<div fxLayout="row" fxLayoutGap="12px">
+    <mat-card  fxFlex="15" [style.overflow]="'auto'" [style.height.px]="'315'" >
+        <mat-card-title>Commands</mat-card-title>
+        <mat-card-content>
+            <div fxLayout="column" fxLayoutGap="12px">
+            <button mat-raised-button color="primary" *ngFor="let command of controllerCommands; let i = index" (click)="getCommandResponse(command)">
+              {{command.name}}
+            </button>
+            </div>
+          <br>
+        </mat-card-content>
+      </mat-card>
+
+  <div fxLayout="column" fxLayoutGap="12px" fxFlex="50">
+    <mat-card fxFlex="100%" [style.overflow]="'auto'" [style.padding.px]="5" >
+      <mat-card-title>Response</mat-card-title>
+      <mat-card-content>
+          <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+          <pre *ngIf="!loading">{{commandResponse | json}}</pre>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
