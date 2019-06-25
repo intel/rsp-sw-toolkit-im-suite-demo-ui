@@ -12,11 +12,15 @@ import { BufferService } from './services/buffer.service';
 import { WebsocketService } from './services/websocket.service';
 import { BleComponent } from './ble/ble.component';
 import { HttpClientModule } from '@angular/common/http';
+import { RFIDInventoryComponent } from './rfid-inventory/rfid-inventory.component';
+import { ApiService } from './services/api.service';
+import { MatProgressSpinnerModule } from '@angular/material'
 
 @NgModule({
   declarations: [
     AppComponent,
     TheftDetectionComponent,
+    RFIDInventoryComponent,
     BleComponent
   ],
   imports: [
@@ -25,11 +29,13 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatButtonModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     BufferService,
-    WebsocketService
+    WebsocketService,
+    ApiService
   ],
   bootstrap: [AppComponent]
 })
