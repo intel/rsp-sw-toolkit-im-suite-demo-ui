@@ -30,11 +30,11 @@ interface data {
 }
 
 @Component({
-  selector: 'app-rfid-inventory',
-  templateUrl: './rfid-inventory.component.html',
-  styleUrls: ['./rfid-inventory.component.scss']
+  selector: 'app-rfid-controller',
+  templateUrl: './rfid-controller.component.html',
+  styleUrls: ['./rfid-controller.component.scss']
 })
-export class RFIDInventoryComponent implements OnInit {
+export class RFIDControllerComponent implements OnInit {
 
   controllerCommands: string[]
   commandResponse: any
@@ -48,6 +48,7 @@ export class RFIDInventoryComponent implements OnInit {
 
   client: HttpClient;
   loading: boolean;
+  loadingCommands: boolean;
 
   constructor(private apiService: ApiService) {
     this.controllerCommands = []
@@ -78,6 +79,7 @@ export class RFIDInventoryComponent implements OnInit {
   }
   
   availableCommands() {   
+    this.loadingCommands  = true;
     this.apiService.getCommands(`http://127.0.0.1:48082/api/v1/device/name/rrs-gateway`)
       .subscribe(
         (message) => {
@@ -87,6 +89,7 @@ export class RFIDInventoryComponent implements OnInit {
           console.log(commandArray[_i].name)
           this.controllerCommands.push(commandArray[_i])     
         }
+        this.loadingCommands = false;
       }
       );
   console.log(this.controllerCommands)    

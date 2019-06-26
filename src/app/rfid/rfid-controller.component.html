@@ -5,7 +5,7 @@
         <mat-card-title>Commands</mat-card-title>
         <mat-card-content>
             <div fxLayout="column" fxLayoutGap="12px">
-            <button mat-raised-button color="primary" *ngFor="let command of controllerCommands; let i = index" (click)="getCommandResponse(command)">
+            <button mat-raised-button color="primary"  *ngFor="let command of controllerCommands; let i = index" (click)="getCommandResponse(command)">
               {{command.name}}
             </button>
             </div>
