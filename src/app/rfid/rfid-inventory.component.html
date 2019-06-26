@@ -1,0 +1,27 @@
+<h1 class="mat-h1">RFID Inventory</h1>
+
+<div fxLayout="row" fxLayoutGap="12px">
+    <mat-card  fxFlex="35" [style.overflow]="'auto'">
+        <mat-card-title>Tags</mat-card-title>
+        <mat-card-content>
+            <div fxLayout="column" fxLayoutGap="12px">
+            <button mat-raised-button color="primary"  *ngFor="let tag of inventoryGetTagsResponse; let i = index" (click)="getTagInfo(tag)">
+              {{tag.epc}}
+            </button>
+            </div>
+          <br>
+        </mat-card-content>
+      </mat-card>
+      <div fxLayout="column" fxLayoutGap="20px" fxFlex="50">
+        <mat-card fxFlex="100%" [style.overflow]="'auto'" [style.padding.px]="5" >
+          <mat-card-title>Response</mat-card-title>
+          <mat-card-content *ngIf='tag !== undefined'>
+              <ul style="list-style-type:none;">
+                <li *ngFor="let location_history of tag.location_history;let i=index">
+                    <button fxFlex="35" mat-fab color="primary" *ngIf="i<2">{{location_history.location}}</button>
+                </li>
+              </ul>
+          </mat-card-content>
+        </mat-card>
+      </div>
+</div>

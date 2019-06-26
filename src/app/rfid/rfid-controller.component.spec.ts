@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RFIDInventoryComponent } from './rfid-inventory.component';
+import { RFIDInventoryComponent } from './rfid-controller.component';
 
 describe('RFIDInventoryComponent', () => {
   let component: RFIDInventoryComponent;

@@ -12,7 +12,8 @@ import { BufferService } from './services/buffer.service';
 import { WebsocketService } from './services/websocket.service';
 import { BleComponent } from './ble/ble.component';
 import { HttpClientModule } from '@angular/common/http';
-import { RFIDInventoryComponent } from './rfid-inventory/rfid-inventory.component';
+import { RFIDInventoryComponent} from './rfid/rfid-inventory.component';
+import { RFIDControllerComponent } from './rfid/rfid-controller.component';
 import { ApiService } from './services/api.service';
 import { MatProgressSpinnerModule } from '@angular/material'
 
@@ -20,6 +21,7 @@ import { MatProgressSpinnerModule } from '@angular/material'
   declarations: [
     AppComponent,
     TheftDetectionComponent,
+    RFIDControllerComponent,
     RFIDInventoryComponent,
     BleComponent
   ],

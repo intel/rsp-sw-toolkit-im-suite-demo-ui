@@ -8,6 +8,5 @@ export class ApiService {
 
   getCommands(url: string){
     return this.client.get(url);
-    //.subscribe((data)=> console.log(JSON.stringify(data)));
   }
 }
