@@ -19,7 +19,7 @@
             <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
             <ul *ngIf="!loading" style="list-style-type:none;">
               <li *ngFor="let sensorId of sensorIds;let i=index">
-                  <button fxFlex="35" mat-fab color="primary" *ngIf="i<2">{{sensorId}}</button>
+                  <button fxFlex="35" mat-fab [ngStyle]="{'background-color': isCurrentLocation(sensorId) ? '#73c7af' : '#000000'}">{{sensorId}}</button>
               </li>
             </ul>
         </mat-card-content>
