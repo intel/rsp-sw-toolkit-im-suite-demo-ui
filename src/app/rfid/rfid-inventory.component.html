@@ -12,16 +12,17 @@
           <br>
         </mat-card-content>
       </mat-card>
-      <div fxLayout="column" fxLayoutGap="20px" fxFlex="50">
-        <mat-card fxFlex="100%" [style.overflow]="'auto'" [style.padding.px]="5" >
-          <mat-card-title>Response</mat-card-title>
-          <mat-card-content *ngIf='tag !== undefined'>
-              <ul style="list-style-type:none;">
-                <li *ngFor="let location_history of tag.location_history;let i=index">
-                    <button fxFlex="35" mat-fab color="primary" *ngIf="i<2">{{location_history.location}}</button>
-                </li>
-              </ul>
-          </mat-card-content>
-        </mat-card>
-      </div>
+    <div fxLayout="column" fxLayoutGap="20px" fxFlex="50">
+      <mat-card fxFlex="100%" [style.overflow]="'auto'" [style.padding.px]="5" >
+        <mat-card-title>Sensors</mat-card-title>
+        <mat-card-content>
+            <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+            <ul *ngIf="!loading" style="list-style-type:none;">
+              <li *ngFor="let sensorId of sensorIds;let i=index">
+                  <button fxFlex="35" mat-fab color="primary" *ngIf="i<2">{{sensorId}}</button>
+              </li>
+            </ul>
+        </mat-card-content>
+      </mat-card>
+    </div>
 </div>

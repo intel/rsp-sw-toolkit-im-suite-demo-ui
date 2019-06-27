@@ -50,6 +50,8 @@ export class RFIDInventoryComponent implements OnInit {
   client: HttpClient;
   loading: boolean;
   loadingCommands: boolean;
+  commands: any[];
+  sensorIds: any;
 
   tag: Tag
   tagLocation: LocationHistory[]
@@ -64,7 +66,7 @@ export class RFIDInventoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.getTags();
+    this.commands = this.apiService.getRfidControllerCommands()
     interval(1000)
     .pipe(
       startWith(0),
@@ -77,7 +79,6 @@ export class RFIDInventoryComponent implements OnInit {
         for (var _i = 0; _i < response.length; _i++){
           this.inventoryGetTagsResponse.push(response[_i]) 
         }
-        this.loading = false;
       });
   }
   ngOnDestroy() {
@@ -98,33 +99,17 @@ export class RFIDInventoryComponent implements OnInit {
   }
 
   getTagInfo(tagInfo: Tag){
-    // console.log(JSON.parse(JSON.stringify(tagInfo)).loc)
-    this.tagLocation = JSON.parse(JSON.stringify(tagInfo)).location_history
-    this.tag = JSON.parse(JSON.stringify(tagInfo))
-    console.log(this.tag)
-    console.log(this.tag.location_history[1])
-    // console.log(tag)
-    // for (var _i = 0; _i < tagInfo.locationHistory.length; _i++){
-    //   this.tagLocation.push(tagInfo.locationHistory[_i]) 
-    // }
-    // console.log(tag.location_history)
-    // this.tagLocation.push(tagInfo.locationHistory);
+    this.loading = true;
+    let sensorGetDeviceIdCommand = this.commands.find(x => x.name == "sensor_get_device_ids")
+    console.log(sensorGetDeviceIdCommand)
+    this.apiService.getRfidControllerCommandResponse(sensorGetDeviceIdCommand)
+    .subscribe(
+      (message)=> {
+        this.sensorIds = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);
+        console.log(this.sensorIds)
+        this.loading = false;
+      }
+    )
+    
   }
-  
-  // availableCommands() {   
-  //   this.loadingCommands  = true;
-  //   this.apiService.getCommands(`http://127.0.0.1:48082/api/v1/device/name/rrs-gateway`)
-  //     .subscribe(
-  //       (message) => {
-  //         let commandArray: any[] = JSON.parse(JSON.stringify(message)).commands
-       
-  //       for (var _i = 0; _i < commandArray.length; _i++){
-  //         console.log(commandArray[_i].name)
-  //         this.controllerCommands.push(commandArray[_i])     
-  //       }
-  //       this.loadingCommands = false;
-  //     }
-  //     );
-  // console.log(this.controllerCommands)    
-  // }
 }
