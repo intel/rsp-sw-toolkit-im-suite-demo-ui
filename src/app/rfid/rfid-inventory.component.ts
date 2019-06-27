@@ -51,7 +51,8 @@ export class RFIDInventoryComponent implements OnInit {
   loading: boolean;
   loadingCommands: boolean;
   commands: any[];
-  sensorIds: any;
+  sensorIds: string[];
+  lastLocation: string;
 
   tag: Tag
   tagLocation: LocationHistory[]
@@ -99,9 +100,9 @@ export class RFIDInventoryComponent implements OnInit {
   }
 
   getTagInfo(tagInfo: Tag){
-    this.loading = true;
+    this.tag = JSON.parse(JSON.stringify(tagInfo))
     let sensorGetDeviceIdCommand = this.commands.find(x => x.name == "sensor_get_device_ids")
-    console.log(sensorGetDeviceIdCommand)
+    this.loading = true;
     this.apiService.getRfidControllerCommandResponse(sensorGetDeviceIdCommand)
     .subscribe(
       (message)=> {
@@ -110,6 +111,27 @@ export class RFIDInventoryComponent implements OnInit {
         this.loading = false;
       }
     )
+
+    interval(1000)
+    .pipe(
+      startWith(0),
+      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags/?$filter=epc eq '`+ this.tag.epc + `'`))
+    )
+    .subscribe(
+      (message)=> {
+        let response: Tag[] = (JSON.parse(JSON.stringify(message)).results);
+        console.log(response[0])
+        this.lastLocation = response[0].location_history[0].location;
+      });
     
+  }
+
+  isCurrentLocation(sensorId: string) : boolean {
+    let lastLocationNoAntenna = this.lastLocation.substring(0,this.lastLocation.lastIndexOf("-"))
+    console.log(this.lastLocation)
+    if(sensorId == lastLocationNoAntenna){
+      return true;
+    }
+    return false;
   }
 }
