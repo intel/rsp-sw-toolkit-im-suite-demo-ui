@@ -54,8 +54,9 @@ export class RFIDInventoryComponent implements OnInit {
   sensorIds: string[];
   lastLocation: string;
 
-  tag: Tag
-  tagLocation: LocationHistory[]
+  tag: Tag;
+  tagLocation: LocationHistory[];
+  tagCount: number;
   
 
   constructor(private apiService: ApiService) {
@@ -80,6 +81,15 @@ export class RFIDInventoryComponent implements OnInit {
         for (var _i = 0; _i < response.length; _i++){
           this.inventoryGetTagsResponse.push(response[_i]) 
         }
+      });
+    interval(1000)
+    .pipe(
+      startWith(0),
+      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags/?$count`))
+    )
+    .subscribe(
+      (message)=> {
+        this.tagCount = (JSON.parse(JSON.stringify(message)).count)
       });
   }
   ngOnDestroy() {
