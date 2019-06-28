@@ -134,4 +134,15 @@ export class RFIDInventoryComponent implements OnInit {
     }
     return false;
   }
+
+  isCurrentLocationImage(sensorId: string) : string {
+    let lastLocationNoAntenna = this.lastLocation.substring(0,this.lastLocation.lastIndexOf("-"))
+    console.log(this.lastLocation)
+    if(sensorId == lastLocationNoAntenna){
+      return "../assets/sensor.png";
+    }
+    return "../assets/sensor2.png";
+  }
+
+  
 }
