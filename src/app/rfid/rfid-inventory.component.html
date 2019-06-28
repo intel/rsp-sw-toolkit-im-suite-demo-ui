@@ -1,26 +1,47 @@
 <h1 class="mat-h1">RFID Inventory</h1>
-
+<div fxLayout="row" fxLayoutGap="30px">
+    <mat-card [ngStyle]="{'background-color':'#4ACF68'}">
+        <mat-card-title>Tags Count</mat-card-title>
+        <mat-card-content>
+          {{tagCount}}
+        </mat-card-content>
+    </mat-card>
+</div>
+<br>
 <div fxLayout="row" fxLayoutGap="12px">
-    <mat-card  fxFlex="35" [style.overflow]="'auto'">
+    <mat-card  fxFlex="16" [style.overflow]="'auto'">
         <mat-card-title>Tags</mat-card-title>
         <mat-card-content>
             <div fxLayout="column" fxLayoutGap="12px">
-            <button mat-raised-button color="primary"  *ngFor="let tag of inventoryGetTagsResponse; let i = index" (click)="getTagInfo(tag)">
-              {{tag.epc}}
-            </button>
+              <div *ngFor="let tag of inventoryGetTagsResponse; let i = index">
+                <button mat-raised-button color="primary"  (click)="getTagInfo(tag)">
+                  {{tag.epc}}
+                </button>
+            </div>
             </div>
           <br>
         </mat-card-content>
       </mat-card>
-    <div fxLayout="column" fxLayoutGap="20px" fxFlex="50">
+  <div fxLayout="column" fxLayoutGap="20px" fxFlex="20">
+    <mat-card  [style.overflow]="'auto'" [style.padding.px]="5" >
+      <mat-card-title>Sensors</mat-card-title>
+      <mat-card-content>
+          <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+          <div *ngFor="let sensorId of sensorIds;let i=index" fxLayout="column" fxLayoutGap="12px">
+            <h3>{{sensorId}}</h3>
+            <button fxFlex="25" style="height:125px;width:125px" mat-fab [ngStyle]="{'background-color': isCurrentLocation(sensorId) ? '#0071C5' : '#003C71'}"></button>
+          </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxLayout="column" fxLayoutGap="20px" fxFlex="30">
       <mat-card  [style.overflow]="'auto'" [style.padding.px]="5" >
-        <mat-card-title>Sensors</mat-card-title>
+        <mat-card-title>Info</mat-card-title>
         <mat-card-content>
             <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-                <div *ngFor="let sensorId of sensorIds;let i=index" fxLayout="column" fxLayoutGap="12px">
-                  <h3>{{sensorId}}</h3>
-                  <button fxFlex="15"  mat-fab [ngStyle]="{'background-color': isCurrentLocation(sensorId) ? '#0071C5' : '#003C71'}"></button>
-                </div>
+            <div fxLayout="column" fxLayoutGap="12px">
+                <pre *ngIf="!loading">{{tag | json}}</pre>
+            </div>
         </mat-card-content>
       </mat-card>
     </div>
