@@ -15,7 +15,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { RFIDInventoryComponent} from './rfid/rfid-inventory.component';
 import { RFIDControllerComponent } from './rfid/rfid-controller.component';
 import { ApiService } from './services/api.service';
-import { MatProgressSpinnerModule } from '@angular/material'
+import { MatProgressSpinnerModule } from '@angular/material';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { MatProgressSpinnerModule } from '@angular/material'
     BrowserAnimationsModule,
     MatButtonModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule,
     FlexLayoutModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NgxJsonViewerModule
   ],
   providers: [
     BufferService,
