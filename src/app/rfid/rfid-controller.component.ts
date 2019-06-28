@@ -57,8 +57,11 @@ export class RFIDControllerComponent implements OnInit {
     this.commands = this.apiService.getRfidControllerCommands()
     console.log(this.commands)
   }
+  
   ngOnDestroy() {
+    if(this.sub) {
     this.sub.unsubscribe();
+    }
   }
 
   getCommandResponse(command: any){
