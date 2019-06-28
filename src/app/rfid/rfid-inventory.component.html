@@ -1,10 +1,10 @@
 <h1 class="mat-h1">RFID Inventory</h1>
-<div fxLayout="row" fxLayoutGap="30px">
-    <mat-card [ngStyle]="{'background-color':'#4ACF68'}">
+<div fxLayout="row" fxLayoutGap="15px">
+    <mat-card>
         <mat-card-title>Tags Count</mat-card-title>
-        <mat-card-content>
-          {{tagCount}}
-        </mat-card-content>
+    </mat-card>
+    <mat-card [ngStyle]="{'background-color':'#4ACF68'}">
+        <mat-card-title>{{tagCount}}</mat-card-title>
     </mat-card>
 </div>
 <br>
@@ -14,7 +14,7 @@
         <mat-card-content>
             <div fxLayout="column" fxLayoutGap="12px">
               <div *ngFor="let tag of inventoryGetTagsResponse; let i = index">
-                <button mat-raised-button color="primary"  (click)="getTagInfo(tag)">
+                <button mat-raised-button color="primary" (click)="getTagInfo(tag)">
                   {{tag.epc}}
                 </button>
             </div>
@@ -28,8 +28,8 @@
       <mat-card-content>
           <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
           <div *ngFor="let sensorId of sensorIds;let i=index" fxLayout="column" fxLayoutGap="12px">
-            <h3>{{sensorId}}</h3>
-            <button fxFlex="25" style="height:125px;width:125px" mat-fab [ngStyle]="{'background-color': isCurrentLocation(sensorId) ? '#0071C5' : '#003C71'}"></button>
+            <h3 *ngIf="!loading" >{{sensorId}}</h3>
+            <button *ngIf="!loading" fxFlex="25" style="height:125px;width:125px" mat-fab [ngStyle]="{'background-color': isCurrentLocation(sensorId) ? '#0071C5' : '#003C71'}"></button>
           </div>
       </mat-card-content>
     </mat-card>
