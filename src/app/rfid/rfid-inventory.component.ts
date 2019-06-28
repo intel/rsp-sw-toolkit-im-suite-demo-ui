@@ -92,8 +92,11 @@ export class RFIDInventoryComponent implements OnInit {
         this.tagCount = (JSON.parse(JSON.stringify(message)).count)
       });
   }
+  
   ngOnDestroy() {
+    if(this.sub) {
     this.sub.unsubscribe();
+    }
   }
 
   getTags(){
