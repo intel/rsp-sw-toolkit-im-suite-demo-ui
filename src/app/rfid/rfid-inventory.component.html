@@ -22,7 +22,7 @@
           <br>
         </mat-card-content>
       </mat-card>
-  <div fxLayout="column" fxLayoutGap="20px" fxFlex="20">
+  <div fxLayout="column" fxLayoutGap="20px" fxFlex="15">
     <mat-card  [style.overflow]="'auto'" [style.padding.px]="5" >
       <mat-card-title>Sensors</mat-card-title>
       <mat-card-content>
@@ -34,13 +34,13 @@
       </mat-card-content>
     </mat-card>
   </div>
-  <div fxLayout="column" fxLayoutGap="20px" fxFlex="30">
+  <div fxLayout="column" fxLayoutGap="20px" fxFlex="45">
       <mat-card  [style.overflow]="'auto'" [style.padding.px]="5" >
         <mat-card-title>Info</mat-card-title>
         <mat-card-content>
             <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
             <div fxLayout="column" fxLayoutGap="12px">
-                <pre *ngIf="!loading">{{tag | json}}</pre>
+                <ngx-json-viewer *ngIf="!loading && tag" [json]="tag" [expanded]="false"></ngx-json-viewer>
             </div>
         </mat-card-content>
       </mat-card>
