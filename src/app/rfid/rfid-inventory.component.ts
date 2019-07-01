@@ -64,6 +64,7 @@ export class RFIDInventoryComponent implements OnInit {
   tempCommandURL: string;
   tempRead: number;
   
+  checkmark: string;
 
   constructor(private apiService: ApiService) {
     this.controllerCommands = []
@@ -81,7 +82,7 @@ export class RFIDInventoryComponent implements OnInit {
     interval(1000)
     .pipe(
       startWith(0),
-      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags`))
+      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags?$orderby=epc asc`))
     )
     .subscribe(
       (message)=> {
@@ -119,19 +120,6 @@ export class RFIDInventoryComponent implements OnInit {
     }
   }
 
-  getTags(){
-    this.loading = true;
-    this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags`)
-    .subscribe(
-      (message)=> {
-        let response: any[] = (JSON.parse(JSON.stringify(message)).results);
-        for (var _i = 0; _i < response.length; _i++){
-          this.inventoryGetTagsResponse.push(response[_i]) 
-        }
-        this.loading = false;
-      });
-  }
-
   getTagInfo(tagInfo: Tag){
     this.tag = JSON.parse(JSON.stringify(tagInfo))
     let sensorGetDeviceIdCommand = this.commands.find(x => x.name == "sensor_get_device_ids")
@@ -140,7 +128,6 @@ export class RFIDInventoryComponent implements OnInit {
     .subscribe(
       (message)=> {
         this.sensorIds = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);
-        console.log(this.sensorIds)
         this.loading = false;
       }
     )
@@ -153,7 +140,6 @@ export class RFIDInventoryComponent implements OnInit {
     .subscribe(
       (message)=> {
         let response: Tag[] = (JSON.parse(JSON.stringify(message)).results);
-        console.log(response[0])
         this.tag = response[0]
         this.lastLocation = response[0].location_history[0].location;
       });
@@ -162,16 +148,16 @@ export class RFIDInventoryComponent implements OnInit {
 
   isCurrentLocation(sensorId: string) : boolean {
     let lastLocationNoAntenna = this.lastLocation.substring(0,this.lastLocation.lastIndexOf("-"))
-    console.log(this.lastLocation)
     if(sensorId == lastLocationNoAntenna){
+      this.checkmark = "✔";
       return true;
     }
+    this.checkmark = "";
     return false;
   }
 
   isCurrentLocationImage(sensorId: string) : string {
     let lastLocationNoAntenna = this.lastLocation.substring(0,this.lastLocation.lastIndexOf("-"))
-    console.log(this.lastLocation)
     if(sensorId == lastLocationNoAntenna){
       return "../assets/sensor.png";
     }

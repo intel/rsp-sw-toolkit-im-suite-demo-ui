@@ -3,7 +3,7 @@
     <mat-card>
         <mat-card-title>Tags Count</mat-card-title>
     </mat-card>
-    <mat-card [ngStyle]="{'background-color':'#4ACF68'}">
+    <mat-card [ngStyle]="{'background-color':'#0071C5', 'color': 'white'}">
         <mat-card-title>{{tagCount}}</mat-card-title>
     </mat-card>
 </div>
@@ -14,7 +14,7 @@
         <mat-card-content>
             <div fxLayout="column" fxLayoutGap="12px">
               <div *ngFor="let tag of inventoryGetTagsResponse; let i = index">
-                <button mat-raised-button color="primary" (click)="getTagInfo(tag)" [style.background-color]="'003C71'">
+                <button mat-raised-button color="#0071C5" (click)="getTagInfo(tag)" [style.background-color]="'#0071C5'" [style.color]="'white'">
                   {{tag.epc}}
                 </button>
             </div>
@@ -29,7 +29,7 @@
           <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
           <div *ngFor="let sensorId of sensorIds;let i=index" fxLayout="column" fxLayoutGap="12px">
             <h3 *ngIf="!loading" >{{sensorId}}</h3>
-            <button *ngIf="!loading" fxFlex="25" style="height:125px;width:125px" mat-fab [ngStyle]="{'background-color': isCurrentLocation(sensorId) ? '#0071C5' : '#003C71'}"></button>
+            <button *ngIf="!loading" fxFlex="25" style="height:125px;width:125px" mat-fab [ngStyle]="{'background-color': isCurrentLocation(sensorId) ? '#0071C5' : '#b1babf', 'font-size': '48px'}">{{checkmark}}</button>
           </div>
       </mat-card-content>
     </mat-card>
