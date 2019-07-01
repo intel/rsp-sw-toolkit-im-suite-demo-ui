@@ -60,7 +60,7 @@ export class RFIDInventoryComponent implements OnInit {
   tagCount: number;
 
   expanded: boolean;
-  
+  checkmark: string;
 
   constructor(private apiService: ApiService) {
     this.controllerCommands = []
@@ -76,7 +76,7 @@ export class RFIDInventoryComponent implements OnInit {
     interval(1000)
     .pipe(
       startWith(0),
-      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags`))
+      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags?$orderby=epc asc`))
     )
     .subscribe(
       (message)=> {
@@ -101,19 +101,6 @@ export class RFIDInventoryComponent implements OnInit {
     if(this.sub) {
     this.sub.unsubscribe();
     }
-  }
-
-  getTags(){
-    this.loading = true;
-    this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags`)
-    .subscribe(
-      (message)=> {
-        let response: any[] = (JSON.parse(JSON.stringify(message)).results);
-        for (var _i = 0; _i < response.length; _i++){
-          this.inventoryGetTagsResponse.push(response[_i]) 
-        }
-        this.loading = false;
-      });
   }
 
   getTagInfo(tagInfo: Tag){
@@ -145,8 +132,10 @@ export class RFIDInventoryComponent implements OnInit {
   isCurrentLocation(sensorId: string) : boolean {
     let lastLocationNoAntenna = this.lastLocation.substring(0,this.lastLocation.lastIndexOf("-"))
     if(sensorId == lastLocationNoAntenna){
+      this.checkmark = "✔";
       return true;
     }
+    this.checkmark = "";
     return false;
   }
 
