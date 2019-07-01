@@ -60,6 +60,9 @@ export class RFIDInventoryComponent implements OnInit {
   tagCount: number;
 
   expanded: boolean;
+
+  tempCommandURL: string;
+  tempRead: number;
   
 
   constructor(private apiService: ApiService) {
@@ -73,6 +76,8 @@ export class RFIDInventoryComponent implements OnInit {
 
   ngOnInit() {
     this.commands = this.apiService.getRfidControllerCommands()
+    this.tempCommandURL = this.apiService.getTemperatureCommand() 
+
     interval(1000)
     .pipe(
       startWith(0),
@@ -94,6 +99,17 @@ export class RFIDInventoryComponent implements OnInit {
     .subscribe(
       (message)=> {
         this.tagCount = (JSON.parse(JSON.stringify(message)).count)
+      });
+
+    // Temperature
+    interval(1000)
+    .pipe(
+      startWith(0),
+      switchMap(() => this.apiService.getTemperatureCommandResponse(this.tempCommandURL))
+    )
+    .subscribe(
+      (message)=> {
+        this.tempRead = (JSON.parse(JSON.stringify(message)).AnalogValue_22)
       });
   }
   

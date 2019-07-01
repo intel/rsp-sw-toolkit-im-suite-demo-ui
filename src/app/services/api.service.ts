@@ -38,4 +38,29 @@ export class ApiService {
     var newUrl = String(getObject.url).replace(re, "127.0.0.1")
     return this.client.get(newUrl)
   }
+
+  getTemperatureCommand() : string{
+    let tempCommand = ""
+
+    this.client.get(`http://127.0.0.1:48082/api/v1/device/name/KMC.BAC-121036CE01`)
+      .subscribe(
+        (message) => {
+          let commandArray: any[] = JSON.parse(JSON.stringify(message)).commands
+          tempCommand =commandArray.find(x => x.name == "CurrentTemperature")       
+      }
+      );
+      console.log(tempCommand)
+      return tempCommand
+  }
+
+  getTemperatureCommandResponse(command: any) : Observable<any> {
+    this.commandResponse = <any>{}
+      var re = /edgex-core-command/gi;
+      let getObject: any = command.get
+      var newUrl = String(getObject.url).replace(re, "127.0.0.1")
+      return this.client.get(newUrl)
+    }
+
 }
+
+
