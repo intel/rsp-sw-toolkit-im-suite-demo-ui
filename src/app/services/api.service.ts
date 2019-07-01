@@ -27,7 +27,6 @@ export class ApiService {
         }
       }
       );
-      console.log(this.controllerCommands)
       return this.controllerCommands
   }
 

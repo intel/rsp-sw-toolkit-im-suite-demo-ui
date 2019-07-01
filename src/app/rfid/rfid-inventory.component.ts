@@ -124,7 +124,6 @@ export class RFIDInventoryComponent implements OnInit {
     .subscribe(
       (message)=> {
         this.sensorIds = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);
-        console.log(this.sensorIds)
         this.loading = false;
       }
     )
@@ -137,7 +136,6 @@ export class RFIDInventoryComponent implements OnInit {
     .subscribe(
       (message)=> {
         let response: Tag[] = (JSON.parse(JSON.stringify(message)).results);
-        console.log(response[0])
         this.tag = response[0]
         this.lastLocation = response[0].location_history[0].location;
       });
@@ -146,7 +144,6 @@ export class RFIDInventoryComponent implements OnInit {
 
   isCurrentLocation(sensorId: string) : boolean {
     let lastLocationNoAntenna = this.lastLocation.substring(0,this.lastLocation.lastIndexOf("-"))
-    console.log(this.lastLocation)
     if(sensorId == lastLocationNoAntenna){
       return true;
     }
@@ -155,7 +152,6 @@ export class RFIDInventoryComponent implements OnInit {
 
   isCurrentLocationImage(sensorId: string) : string {
     let lastLocationNoAntenna = this.lastLocation.substring(0,this.lastLocation.lastIndexOf("-"))
-    console.log(this.lastLocation)
     if(sensorId == lastLocationNoAntenna){
       return "../assets/sensor.png";
     }
