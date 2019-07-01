@@ -7,6 +7,7 @@ import { ApiService } from '../services/api.service';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { Tag, LocationHistory } from './tag/tag-event';
 import { startWith, switchMap } from 'rxjs/operators';
+import { resetCompiledComponents } from '@angular/core/src/render3/jit/module';
 
 
 interface posItem {
@@ -134,6 +135,7 @@ export class RFIDInventoryComponent implements OnInit {
       (message)=> {
         let response: Tag[] = (JSON.parse(JSON.stringify(message)).results);
         console.log(response[0])
+        this.tag = response[0]
         this.lastLocation = response[0].location_history[0].location;
       });
     

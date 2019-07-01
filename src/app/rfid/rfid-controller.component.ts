@@ -60,7 +60,7 @@ export class RFIDControllerComponent implements OnInit {
   
   ngOnDestroy() {
     if(this.sub) {
-    this.sub.unsubscribe();
+      this.sub.unsubscribe();
     }
   }
 
