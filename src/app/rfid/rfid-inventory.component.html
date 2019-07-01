@@ -41,7 +41,7 @@
         <mat-card-content>
             <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
             <div fxLayout="column" fxLayoutGap="12px">
-                <ngx-json-viewer *ngIf="!loading && tag" [json]="tag" [expanded]="false"></ngx-json-viewer>
+                <ngx-json-viewer *ngIf="!loading && tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()"></ngx-json-viewer>
             </div>
         </mat-card-content>
       </mat-card>

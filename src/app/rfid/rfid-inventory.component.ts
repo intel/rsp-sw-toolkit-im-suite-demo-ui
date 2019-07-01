@@ -58,6 +58,8 @@ export class RFIDInventoryComponent implements OnInit {
   tag: Tag;
   tagLocation: LocationHistory[];
   tagCount: number;
+
+  expanded: boolean;
   
 
   constructor(private apiService: ApiService) {
@@ -66,6 +68,7 @@ export class RFIDInventoryComponent implements OnInit {
     this.tagLocation = []
     this.suspectItems = []
     this.scaleReading = {} as scaleItem
+    this.expanded = false
   }
 
   ngOnInit() {
@@ -159,5 +162,12 @@ export class RFIDInventoryComponent implements OnInit {
     return "../assets/sensor2.png";
   }
 
+  clickedInfo(){
+    if (this.expanded == true){
+      this.expanded = false;
+    } else {
+    this.expanded = true;
+    }
+  }
   
 }
