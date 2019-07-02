@@ -60,11 +60,12 @@ export class RFIDInventoryComponent implements OnInit {
   tagCount: number;
 
   expanded: boolean;
-
-  tempCommandURL: string;
-  tempRead: number;
-  
   checkmark: string;
+
+  tempCommand: any[];
+  tempRead: string;
+  thermostat: string;
+  tempFacility: string;
 
   constructor(private apiService: ApiService) {
     this.controllerCommands = []
@@ -73,82 +74,91 @@ export class RFIDInventoryComponent implements OnInit {
     this.suspectItems = []
     this.scaleReading = {} as scaleItem
     this.expanded = false
+    this.tempRead = ""
+    this.thermostat = "KMC.BAC-121036CE01"
+
   }
 
   ngOnInit() {
+
     this.commands = this.apiService.getRfidControllerCommands()
-    this.tempCommandURL = this.apiService.getTemperatureCommand() 
+    this.tempCommand = this.apiService.getTemperatureCommand(this.thermostat)
 
     interval(1000)
-    .pipe(
-      startWith(0),
-      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags?$orderby=epc asc`))
-    )
-    .subscribe(
-      (message)=> {
-        this.inventoryGetTagsResponse = [];
-        let response: any[] = (JSON.parse(JSON.stringify(message)).results);
-        for (var _i = 0; _i < response.length; _i++){
-          this.inventoryGetTagsResponse.push(response[_i]) 
-        }
-      });
+      .pipe(
+        startWith(0),
+        switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags?$orderby=epc asc`))
+      )
+      .subscribe(
+        (message) => {
+          this.inventoryGetTagsResponse = [];
+          let response: any[] = (JSON.parse(JSON.stringify(message)).results);
+          for (var _i = 0; _i < response.length; _i++) {
+            this.inventoryGetTagsResponse.push(response[_i])
+          }
+        });
     interval(1000)
-    .pipe(
-      startWith(0),
-      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags/?$count`))
-    )
-    .subscribe(
-      (message)=> {
-        this.tagCount = (JSON.parse(JSON.stringify(message)).count)
-      });
-
-    // Temperature
-    interval(1000)
-    .pipe(
-      startWith(0),
-      switchMap(() => this.apiService.getTemperatureCommandResponse(this.tempCommandURL))
-    )
-    .subscribe(
-      (message)=> {
-        this.tempRead = (JSON.parse(JSON.stringify(message)).AnalogValue_22)
-      });
+      .pipe(
+        startWith(0),
+        switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags/?$count`))
+      )
+      .subscribe(
+        (message) => {
+          this.tagCount = (JSON.parse(JSON.stringify(message)).count)
+        });
   }
-  
+
   ngOnDestroy() {
-    if(this.sub) {
-    this.sub.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
   }
 
-  getTagInfo(tagInfo: Tag){
+  getTagInfo(tagInfo: Tag) {
     this.tag = JSON.parse(JSON.stringify(tagInfo))
     let sensorGetDeviceIdCommand = this.commands.find(x => x.name == "sensor_get_device_ids")
+    let temp = this.tempCommand.find(x => x.name == "CurrentTemperature")
+
     this.loading = true;
     this.apiService.getRfidControllerCommandResponse(sensorGetDeviceIdCommand)
-    .subscribe(
-      (message)=> {
-        this.sensorIds = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);
-        this.loading = false;
-      }
-    )
+      .subscribe(
+        (message) => {
+          this.sensorIds = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);
+          this.sensorIds.length > 0 ? this.tempFacility = this.sensorIds[0] : this.tempFacility = ""
+          this.loading = false;
+        }
+      )
+
+    // Temperature reads
+    interval(1000)
+      .pipe(
+        startWith(0),
+        switchMap(() => this.apiService.getTemperatureCommandResponse(temp))
+      )
+      .subscribe(
+        (message) => {
+          this.tempRead = parseFloat((JSON.parse(JSON.stringify(message)).AnalogValue_40)).toFixed(2)
+        });
 
     interval(1000)
-    .pipe(
-      startWith(0),
-      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags/?$filter=epc eq '`+ this.tag.epc + `'`))
-    )
-    .subscribe(
-      (message)=> {
-        let response: Tag[] = (JSON.parse(JSON.stringify(message)).results);
-        this.tag = response[0]
-        this.lastLocation = response[0].location_history[0].location;
-      });
-    
+      .pipe(
+        startWith(0),
+        switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags/?$filter=epc eq '` + this.tag.epc + `'`))
+      )
+      .subscribe(
+        (message) => {
+          let response: Tag[] = (JSON.parse(JSON.stringify(message)).results);
+          this.tag = response[0]
+          this.lastLocation = response[0].location_history[0].location;
+          this.tag.temperature = this.tempFacility === this.lastLocation.substring(0,  this.lastLocation.length - 2) ? this.tempRead : "N/A"
+        });
+
+
   }
 
-  isCurrentLocation(sensorId: string) : boolean {
-    let lastLocationNoAntenna = this.lastLocation.substring(0,this.lastLocation.lastIndexOf("-"))
-    if(sensorId == lastLocationNoAntenna){
+  isCurrentLocation(sensorId: string): boolean {
+    let lastLocationNoAntenna = this.lastLocation.substring(0, this.lastLocation.lastIndexOf("-"))
+    if (sensorId == lastLocationNoAntenna) {
       this.checkmark = "✔";
       return true;
     }
@@ -156,20 +166,20 @@ export class RFIDInventoryComponent implements OnInit {
     return false;
   }
 
-  isCurrentLocationImage(sensorId: string) : string {
-    let lastLocationNoAntenna = this.lastLocation.substring(0,this.lastLocation.lastIndexOf("-"))
-    if(sensorId == lastLocationNoAntenna){
+  isCurrentLocationImage(sensorId: string): string {
+    let lastLocationNoAntenna = this.lastLocation.substring(0, this.lastLocation.lastIndexOf("-"))
+    if (sensorId == lastLocationNoAntenna) {
       return "../assets/sensor.png";
     }
     return "../assets/sensor2.png";
   }
 
-  clickedInfo(){
-    if (this.expanded == true){
+  clickedInfo() {
+    if (this.expanded == true) {
       this.expanded = false;
     } else {
-    this.expanded = true;
+      this.expanded = true;
     }
   }
-  
+
 }

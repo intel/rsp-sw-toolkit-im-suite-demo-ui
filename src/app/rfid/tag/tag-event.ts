@@ -19,6 +19,7 @@ export interface Tag{
     ttl: string;
     epc_context: string;
     confidence: number;
+    temperature: string;
 }
 
 export interface LocationHistory{
