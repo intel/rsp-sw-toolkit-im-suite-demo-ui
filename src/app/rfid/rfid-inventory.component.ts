@@ -153,7 +153,6 @@ export class RFIDInventoryComponent implements OnInit {
           this.tag.temperature = this.tempFacility === this.lastLocation.substring(0,  this.lastLocation.length - 2) ? this.tempRead : "N/A"
         });
 
-
   }
 
   isCurrentLocation(sensorId: string): boolean {

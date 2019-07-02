@@ -1,0 +1,17 @@
+<h1 class="mat-h1">Temperature data</h1>
+
+<div fxLayout="row">
+    <mat-card>
+      <canvas baseChart width="900" height="600"
+        [datasets]="lineChartData"
+        [labels]="lineChartLabels"
+        [options]="lineChartOptions"
+        [colors]="lineChartColors"
+        [legend]="lineChartLegend"
+        [chartType]="lineChartType"
+        [plugins]="lineChartPlugins">
+      </canvas>
+    </mat-card>
+</div>
+
+

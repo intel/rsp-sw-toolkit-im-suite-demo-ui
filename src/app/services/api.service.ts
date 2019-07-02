@@ -53,7 +53,7 @@ export class ApiService {
       );    
     return tempCommand
   }
-
+  
   getTemperatureCommandConfRoom(): string {
     let tempCommand = ""
     this.client.get(`http://127.0.0.1:48082/api/v1/device/name/JC.RR5.NAE9.ConfRoom.Padre.Island01`)
@@ -73,6 +73,7 @@ export class ApiService {
     var newUrl = String(getObject.url).replace(re, "127.0.0.1")
     return this.client.get(newUrl)
   }
+
 }
 
 

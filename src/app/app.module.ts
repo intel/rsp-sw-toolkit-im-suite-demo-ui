@@ -17,6 +17,8 @@ import { RFIDControllerComponent } from './rfid/rfid-controller.component';
 import { ApiService } from './services/api.service';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { TemperatureComponent } from './temperature/temperature.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
     TheftDetectionComponent,
     RFIDControllerComponent,
     RFIDInventoryComponent,
-    BleComponent
+    BleComponent,
+    TemperatureComponent
   ],
   imports: [
     HttpClientModule,
@@ -34,7 +37,8 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
     MatButtonModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule,
     FlexLayoutModule,
     MatProgressSpinnerModule,
-    NgxJsonViewerModule
+    NgxJsonViewerModule,
+    ChartsModule
   ],
   providers: [
     BufferService,
