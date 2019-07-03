@@ -67,7 +67,7 @@ export class RFIDControllerComponent implements OnInit {
   getCommandResponse(command: any){
     this.commandResponse = <any>{}
     this.loading = true;
-    this.apiService.getRfidControllerCommandResponse(command)
+    this.apiService.getCommandResponse(command)
     .subscribe(
       (message)=> {
         this.commandResponse = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);

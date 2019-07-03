@@ -50,6 +50,7 @@ export class RFIDInventoryComponent implements OnInit {
 
   client: HttpClient;
   loading: boolean;
+  loadingTags: boolean;
   loadingCommands: boolean;
   commands: any[];
   sensorIds: string[];
@@ -63,8 +64,7 @@ export class RFIDInventoryComponent implements OnInit {
   checkmark: string;
 
   tempCommand: any[];
-  tempRead: string;
-  thermostat: string;
+  tempRead: string;  
   tempFacility: string;
 
   constructor(private apiService: ApiService) {
@@ -74,18 +74,13 @@ export class RFIDInventoryComponent implements OnInit {
     this.suspectItems = []
     this.scaleReading = {} as scaleItem
     this.expanded = false
-    this.tempRead = ""
-    this.thermostat = "KMC.BAC-121036CE01"
-
-    this.apiService.myTempCommandsEventEmitter.subscribe((val)=>{
-      this.tempCommand = val
-    })
-
+    this.tempRead = ""      
   }
 
   ngOnInit() {
 
-    this.commands = this.apiService.getRfidControllerCommands()   
+    this.commands = this.apiService.getRfidControllerCommands() 
+    this.apiService.myTempCommandsEventEmitter.subscribe((val)=>{})  
 
     interval(1000)
       .pipe(
@@ -120,10 +115,10 @@ export class RFIDInventoryComponent implements OnInit {
   getTagInfo(tagInfo: Tag) {
     this.tag = JSON.parse(JSON.stringify(tagInfo))
     let sensorGetDeviceIdCommand = this.commands.find(x => x.name == "sensor_get_device_ids")
-    let temp = this.tempCommand.find(x => x.name == "CurrentTemperature")
+    let temp = this.apiService.temperatureCommands.find(x => x.name == "CurrentTemperature")
 
-    this.loading = true;
-    this.apiService.getRfidControllerCommandResponse(sensorGetDeviceIdCommand)
+    this.loading = true;    
+    this.apiService.getCommandResponse(sensorGetDeviceIdCommand)
       .subscribe(
         (message) => {
           this.sensorIds = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);
@@ -136,13 +131,14 @@ export class RFIDInventoryComponent implements OnInit {
     interval(1000)
       .pipe(
         startWith(0),
-        switchMap(() => this.apiService.getTemperatureCommandResponse(temp))
+        switchMap(() => this.apiService.getCommandResponse(temp))
       )
       .subscribe(
         (message) => {
           this.tempRead = parseFloat((JSON.parse(JSON.stringify(message)).AnalogValue_40)).toFixed(2)
         });
-
+    
+    this.loadingTags = true;
     interval(1000)
       .pipe(
         startWith(0),
@@ -153,7 +149,11 @@ export class RFIDInventoryComponent implements OnInit {
           let response: Tag[] = (JSON.parse(JSON.stringify(message)).results);
           this.tag = response[0]
           this.lastLocation = response[0].location_history[0].location;
-          this.tag.temperature = this.tempFacility === this.lastLocation.substring(0,  this.lastLocation.length - 2) ? this.tempRead : "N/A"
+          // Tie temperature sensor to first RSP sensor
+          if(this.tempRead !== '' || this.tempRead !== undefined){
+            this.tag.temperature = this.tempFacility === this.lastLocation.substring(0,  this.lastLocation.length - 2) ? this.tempRead : "N/A"
+          }          
+          this.loadingTags = false;
         });
 
   }

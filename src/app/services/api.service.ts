@@ -7,12 +7,14 @@ import { subscribeOn } from 'rxjs/operators';
 export class ApiService {
   controllerCommands: any[]
   commandResponse: any
-  temperatureCommands: any[]
+  public temperatureCommands: any[]
   public myTempCommandsEventEmitter: EventEmitter<any[]>
 
   constructor(private client: HttpClient) {
     this.controllerCommands = []
     this.myTempCommandsEventEmitter = new EventEmitter<any[]>()
+
+    // Get EdgeX commands for 'KMC.BAC-121036CE01' virtual temperature sensor
     this.getTemperatureCommand("KMC.BAC-121036CE01")
   }
 
@@ -35,7 +37,7 @@ export class ApiService {
     return this.controllerCommands
   }
 
-  getRfidControllerCommandResponse(command: any): Observable<any> {
+  getCommandResponse(command: any): Observable<any> {
     this.commandResponse = <any>{}
     var re = /edgex-core-command/gi;
     let getObject: any = command.get
@@ -43,7 +45,7 @@ export class ApiService {
     return this.client.get(newUrl)
   }
 
-  getTemperatureCommand(device: string): any[] {
+  getTemperatureCommand(device: string): void {
     
     this.client.get("http://127.0.0.1:48082/api/v1/device/name/"+device)
       .subscribe(
@@ -51,17 +53,8 @@ export class ApiService {
           this.temperatureCommands = JSON.parse(JSON.stringify(message)).commands = JSON.parse(JSON.stringify(message)).commands
           this.myTempCommandsEventEmitter.emit(this.temperatureCommands)       
         }
-      );    
-    return this.temperatureCommands
-  }
-  
-  getTemperatureCommandResponse(command: any): Observable<any> {
-    this.commandResponse = <any>{}
-    var re = /edgex-core-command/gi;
-    let getObject: any = command.get
-    var newUrl = String(getObject.url).replace(re, "127.0.0.1")
-    return this.client.get(newUrl)
-  }
+      );        
+  } 
 
 }
 

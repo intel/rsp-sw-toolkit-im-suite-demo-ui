@@ -2,8 +2,8 @@
 
 <div fxLayout="row">
 <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-    <mat-card *ngIf="!loading">
-      <canvas baseChart width="900" height="600"
+    <mat-card fxFlex="85%" *ngIf="!loading">
+      <canvas baseChart 
         [datasets]="lineChartData"
         [labels]="lineChartLabels"
         [options]="lineChartOptions"

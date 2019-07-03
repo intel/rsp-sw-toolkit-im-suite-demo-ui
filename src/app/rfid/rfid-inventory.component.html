@@ -1,7 +1,7 @@
 <h1 class="mat-h1">RFID Inventory</h1>
 <div fxLayout="row" fxLayoutGap="15px">
     <mat-card>
-        <mat-card-title>Tags Count</mat-card-title>
+        <mat-card-title>Inventory Count</mat-card-title>
     </mat-card>
     <mat-card [ngStyle]="{'background-color':'#0071C5', 'color': 'white'}">
         <mat-card-title>{{tagCount}}</mat-card-title>        
@@ -30,6 +30,8 @@
           <div *ngFor="let sensorId of sensorIds;let i=index" fxLayout="column" fxLayoutGap="12px">
             <h3 *ngIf="!loading" >{{sensorId}}</h3>
             <button *ngIf="!loading" fxFlex="25" style="height:125px;width:125px" mat-fab [ngStyle]="{'background-color': isCurrentLocation(sensorId) ? '#0071C5' : '#b1babf', 'font-size': '48px'}">{{checkmark}}</button>
+            <img *ngIf="i==0 && tempRead != ''" src="../assets/icons8-temperature-48.png" style="height:48px;width:48px" />
+            <span *ngIf="i==0 && tempRead != ''" style="font-weight: bold">{{tempRead}}°F</span>
           </div>
       </mat-card-content>
     </mat-card>
@@ -39,9 +41,9 @@
       <mat-card  [style.overflow]="'auto'" [style.padding.px]="5" >
         <mat-card-title>Info</mat-card-title>
         <mat-card-content>
-            <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+            <mat-progress-spinner mode="indeterminate" *ngIf="loadingTags"></mat-progress-spinner>
             <div fxLayout="column" fxLayoutGap="12px">
-                <ngx-json-viewer *ngIf="!loading && tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()"></ngx-json-viewer>
+                <ngx-json-viewer *ngIf="tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()"></ngx-json-viewer>
             </div>
         </mat-card-content>
       </mat-card>
