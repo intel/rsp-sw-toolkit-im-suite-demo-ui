@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs';
 import { subscribeOn } from 'rxjs/operators';
@@ -7,9 +7,13 @@ import { subscribeOn } from 'rxjs/operators';
 export class ApiService {
   controllerCommands: any[]
   commandResponse: any
+  temperatureCommands: any[]
+  public myTempCommandsEventEmitter: EventEmitter<any[]>
 
   constructor(private client: HttpClient) {
     this.controllerCommands = []
+    this.myTempCommandsEventEmitter = new EventEmitter<any[]>()
+    this.getTemperatureCommand("KMC.BAC-121036CE01")
   }
 
   getCommands(url: string) {
@@ -40,18 +44,15 @@ export class ApiService {
   }
 
   getTemperatureCommand(device: string): any[] {
-    let tempCommand = []
+    
     this.client.get("http://127.0.0.1:48082/api/v1/device/name/"+device)
       .subscribe(
         (message) => {
-          let commandArray: any[] = JSON.parse(JSON.stringify(message)).commands
-
-          for (var _i = 0; _i < commandArray.length; _i++) {
-            tempCommand.push(commandArray[_i])
-          }          
+          this.temperatureCommands = JSON.parse(JSON.stringify(message)).commands = JSON.parse(JSON.stringify(message)).commands
+          this.myTempCommandsEventEmitter.emit(this.temperatureCommands)       
         }
       );    
-    return tempCommand
+    return this.temperatureCommands
   }
   
   getTemperatureCommandResponse(command: any): Observable<any> {

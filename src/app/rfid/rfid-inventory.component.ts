@@ -77,12 +77,15 @@ export class RFIDInventoryComponent implements OnInit {
     this.tempRead = ""
     this.thermostat = "KMC.BAC-121036CE01"
 
+    this.apiService.myTempCommandsEventEmitter.subscribe((val)=>{
+      this.tempCommand = val
+    })
+
   }
 
   ngOnInit() {
 
-    this.commands = this.apiService.getRfidControllerCommands()
-    this.tempCommand = this.apiService.getTemperatureCommand(this.thermostat)
+    this.commands = this.apiService.getRfidControllerCommands()   
 
     interval(1000)
       .pipe(
