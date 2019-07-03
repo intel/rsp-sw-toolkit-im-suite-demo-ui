@@ -54,18 +54,6 @@ export class ApiService {
     return tempCommand
   }
   
-  getTemperatureCommandConfRoom(): string {
-    let tempCommand = ""
-    this.client.get(`http://127.0.0.1:48082/api/v1/device/name/JC.RR5.NAE9.ConfRoom.Padre.Island01`)
-      .subscribe(
-        (message) => {
-          let commandArray: any[] = JSON.parse(JSON.stringify(message)).commands
-          tempCommand = commandArray.find(x => x.name == "CurrentTemperature")
-        }
-      );    
-    return tempCommand
-  }
-
   getTemperatureCommandResponse(command: any): Observable<any> {
     this.commandResponse = <any>{}
     var re = /edgex-core-command/gi;

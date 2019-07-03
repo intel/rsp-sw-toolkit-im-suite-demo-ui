@@ -1,15 +1,16 @@
 <h1 class="mat-h1">Temperature data</h1>
 
 <div fxLayout="row">
-    <mat-card>
+<mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+    <mat-card *ngIf="!loading">
       <canvas baseChart width="900" height="600"
         [datasets]="lineChartData"
         [labels]="lineChartLabels"
         [options]="lineChartOptions"
         [colors]="lineChartColors"
         [legend]="lineChartLegend"
-        [chartType]="lineChartType"
-        [plugins]="lineChartPlugins">
+        [chartType]="lineChartType" 
+        [plugins]="lineChartPlugins"> 
       </canvas>
     </mat-card>
 </div>
