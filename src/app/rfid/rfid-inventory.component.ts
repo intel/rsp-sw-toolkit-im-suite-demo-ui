@@ -7,8 +7,6 @@ import { ApiService } from '../services/api.service';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { Tag, LocationHistory } from './tag/tag-event';
 import { startWith, switchMap } from 'rxjs/operators';
-import { resetCompiledComponents } from '@angular/core/src/render3/jit/module';
-
 
 interface posItem {
   product_id: string;
