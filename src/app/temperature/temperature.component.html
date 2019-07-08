@@ -1,10 +1,14 @@
-<h1 class="mat-h1">Temperature data</h1>
+<mat-toolbar color="primary">
+  <h1 class="mat-h1">Temperature data</h1>
+</mat-toolbar>
+<div style="padding:12px">
 
-<div fxLayout="row">
-  <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-  <mat-card fxFlex="100" *ngIf="!loading">
-    <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
-      [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
-    </canvas>
-  </mat-card>
+  <div fxLayout="row">
+    <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+    <mat-card fxFlex="100" *ngIf="!loading">
+      <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+        [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+      </canvas>
+    </mat-card>
+  </div>
 </div>

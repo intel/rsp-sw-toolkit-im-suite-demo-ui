@@ -39,3 +39,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .edgex-ui-dark-theme {
     @include angular-material-theme($edgex-ui-dark-theme);
   }
+  .active-link{
+    background-color:lightgray;
+}
