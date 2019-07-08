@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { MatButtonModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule } from '@angular/material';
+import { MatButtonModule, MatPaginator, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule, MatPaginatorModule } from '@angular/material';
 import { TheftDetectionComponent } from './theft-detection/theft-detection.component';
 import { BufferService } from './services/buffer.service';
 import { WebsocketService } from './services/websocket.service';
@@ -34,7 +34,7 @@ import { ChartsModule } from 'ng2-charts';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatButtonModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule,
+    MatButtonModule, MatPaginatorModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule,
     FlexLayoutModule,
     MatProgressSpinnerModule,
     NgxJsonViewerModule,

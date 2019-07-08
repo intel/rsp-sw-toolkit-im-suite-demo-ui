@@ -2,14 +2,19 @@
   <h1 class="mat-display-1">RFID Inventory</h1>
 </mat-toolbar>
 <div fxLayout="row wrap" fxLayoutGap="12px grid"  style="padding:12px">
-  <div fxLayout="column" fxFlex=20 fxFlex.lt-lg=50>
+  <div fxLayout="column" fxFlex=22 fxFlex.lt-lg=50>
     <mat-card>
       <mat-card-title>Tags ({{tagCount}})</mat-card-title>
       <mat-card-subtitle>&nbsp;</mat-card-subtitle>
       <mat-card-content>
+        <mat-paginator [length]="inventoryGetTagsResponse.length"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          (page)="pageEvent = OnPageChange($event)">
+        </mat-paginator>
         <div fxLayout="column" fxLayoutGap="12px">
           <mat-nav-list color="primary">
-            <mat-list-item *ngFor="let t of inventoryGetTagsResponse; let i = index"
+            <mat-list-item *ngFor="let t of pagedList; let i = index"
               [ngClass]="{'active':tag?.epc === t.epc}" (click)="getTagInfo(t)">
               <mat-icon matListIcon>label</mat-icon>
               <p mat-line>{{t.epc}}</p>
@@ -56,13 +61,13 @@
     </mat-card>
   </div>
 
-  <div fxLayout="column" fxFlex=50 fxFlex.lt-lg=100>
+  <div fxLayout="column" fxFlex=40 fxFlex.lt-lg=100>
     <mat-card>
       <mat-card-title>Info</mat-card-title>
       <mat-card-subtitle>&nbsp;</mat-card-subtitle>
       <mat-card-content>
         <mat-progress-spinner mode="indeterminate" *ngIf="loadingTags"></mat-progress-spinner>
-        <div fxLayout="column" fxLayoutGap="12px">
+        <div [fxShow]="!loading" fxLayout="column" fxLayoutGap="12px">
           <ngx-json-viewer *ngIf="tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()"></ngx-json-viewer>
         </div>
       </mat-card-content>
