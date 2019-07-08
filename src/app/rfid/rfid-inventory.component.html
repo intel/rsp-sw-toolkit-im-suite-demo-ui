@@ -1,38 +1,45 @@
 <h1 class="mat-display-1">RFID Inventory</h1>
-<div fxLayout="row" fxLayoutGap="12px">
-  <mat-card fxFlex=20 [style.overflow]="'auto'">
-    <mat-card-title>Tags ({{tagCount}})</mat-card-title>
-    <mat-card-subtitle>&nbsp;</mat-card-subtitle>
-    <mat-card-content>
-      <div fxLayout="column" fxLayoutGap="12px">
-        <mat-nav-list color="primary"  >
-          <mat-list-item *ngFor="let t of inventoryGetTagsResponse; let i = index"  [ngClass]="{'active':tag?.epc === t.epc}" (click)="getTagInfo(t)">
-            <mat-icon matListIcon>label</mat-icon>
-            <p mat-line>{{t.epc}}</p>
-            <p mat-line> Last Read: {{t.last_read | date:'short'}} </p>
-            <!-- <button mat-raised-button color="#0071C5" [style.background-color]="'#0071C5'"
+<div fxLayout="row wrap" fxLayoutGap="12px grid">
+  <div fxLayout="column" fxFlex=20 fxFlex.lt-lg=50>
+    <mat-card>
+      <mat-card-title>Tags ({{tagCount}})</mat-card-title>
+      <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+      <mat-card-content>
+        <div fxLayout="column" fxLayoutGap="12px">
+          <mat-nav-list color="primary">
+            <mat-list-item *ngFor="let t of inventoryGetTagsResponse; let i = index"
+              [ngClass]="{'active':tag?.epc === t.epc}" (click)="getTagInfo(t)">
+              <mat-icon matListIcon>label</mat-icon>
+              <p mat-line>{{t.epc}}</p>
+              <p mat-line> Last Read: {{t.last_read | date:'short'}} </p>
+              <!-- <button mat-raised-button color="#0071C5" [style.background-color]="'#0071C5'"
               [style.color]="'white'">
           
             </button> -->
-          </mat-list-item>
-        </mat-nav-list>
-      </div>
-      <br>
-    </mat-card-content>
-  </mat-card>
-  <div fxLayout="column" fxFlex=30>
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+        <br>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxLayout="column" fxFlex=30 fxFlex.lt-lg=50>
     <mat-card>
       <mat-card-title>Sensors</mat-card-title>
       <mat-card-subtitle>&nbsp;</mat-card-subtitle>
-      <mat-card-content>
-        <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-        <mat-list>
+      <mat-card-content fxLayout="row wrap">
+
+        <div fxFlex=100 fxFlexFill fxLayoutAlign="center center" *ngIf="loading">
+          <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        </div>
+
+        <mat-list fxFlex=100 [fxShow]="!loading">
           <mat-list-item *ngFor="let sensorId of sensorIds;let i=index"
             [ngClass]="{'active': isCurrentLocation(sensorId) === true}">
             <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === true">check_circle_outline</mat-icon>
             <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === false">check_circle</mat-icon>
             <div fxLayout="row" fxFlexFill fxLayoutAlign="center center">
-              <div fxFlex=100 *ngIf="!loading">{{sensorId}}</div>
+              <div fxFlex=100>{{sensorId}}</div>
               <div fxFlex=20 fxFlexAlign="end end" *ngIf="i==0 && tempRead != ''"
                 style="font-weight: bold;text-align: right;margin-right:30px;">
                 <div fxLayout="row" fxLayoutAlign="center">
@@ -46,8 +53,8 @@
       </mat-card-content>
     </mat-card>
   </div>
-  <br>
-  <div fxLayout="column" fxFlex=50>
+
+  <div fxLayout="column" fxFlex=50 fxFlex.lt-lg=100>
     <mat-card>
       <mat-card-title>Info</mat-card-title>
       <mat-card-subtitle>&nbsp;</mat-card-subtitle>
