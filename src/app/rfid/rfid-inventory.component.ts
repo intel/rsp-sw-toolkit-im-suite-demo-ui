@@ -62,7 +62,7 @@ export class RFIDInventoryComponent implements OnInit {
   checkmark: string;
 
   tempCommand: any[];
-  tempRead: string;  
+  tempRead: string;
   tempFacility: string;
 
   constructor(private apiService: ApiService) {
@@ -72,13 +72,13 @@ export class RFIDInventoryComponent implements OnInit {
     this.suspectItems = []
     this.scaleReading = {} as scaleItem
     this.expanded = false
-    this.tempRead = ""      
+    this.tempRead = ""
   }
 
   ngOnInit() {
 
-    this.commands = this.apiService.getRfidControllerCommands() 
-    this.apiService.myTempCommandsEventEmitter.subscribe((val)=>{})  
+    this.commands = this.apiService.getRfidControllerCommands()
+    this.apiService.myTempCommandsEventEmitter.subscribe((val) => { })
 
     interval(1000)
       .pipe(
@@ -115,7 +115,7 @@ export class RFIDInventoryComponent implements OnInit {
     let sensorGetDeviceIdCommand = this.commands.find(x => x.name == "sensor_get_device_ids")
     let temp = this.apiService.temperatureCommands.find(x => x.name == "CurrentTemperature")
 
-    this.loading = true;    
+    this.loading = true;
     this.apiService.getCommandResponse(sensorGetDeviceIdCommand)
       .subscribe(
         (message) => {
@@ -135,7 +135,7 @@ export class RFIDInventoryComponent implements OnInit {
         (message) => {
           this.tempRead = parseFloat((JSON.parse(JSON.stringify(message)).AnalogValue_40)).toFixed(2)
         });
-    
+
     this.loadingTags = true;
     interval(1000)
       .pipe(
@@ -148,9 +148,9 @@ export class RFIDInventoryComponent implements OnInit {
           this.tag = response[0]
           this.lastLocation = response[0].location_history[0].location;
           // Tie temperature sensor to first RSP sensor
-          if(this.tempRead !== '' || this.tempRead !== undefined){
-            this.tag.temperature = this.tempFacility === this.lastLocation.substring(0,  this.lastLocation.length - 2) ? this.tempRead : "N/A"
-          }          
+          if (this.tempRead !== '' || this.tempRead !== undefined) {
+            this.tag.temperature = this.tempFacility === this.lastLocation.substring(0, this.lastLocation.length - 2) ? this.tempRead : "N/A"
+          }
           this.loadingTags = false;
         });
 

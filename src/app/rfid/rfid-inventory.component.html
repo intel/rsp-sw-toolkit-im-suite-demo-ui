@@ -1,51 +1,62 @@
-<h1 class="mat-h1">RFID Inventory</h1>
-<div fxLayout="row" fxLayoutGap="15px">
-    <mat-card>
-        <mat-card-title>Inventory Count</mat-card-title>
-    </mat-card>
-    <mat-card [ngStyle]="{'background-color':'#0071C5', 'color': 'white'}">
-        <mat-card-title>{{tagCount}}</mat-card-title>        
-    </mat-card>
-</div>
-<br>
+<h1 class="mat-display-1">RFID Inventory</h1>
 <div fxLayout="row" fxLayoutGap="12px">
-    <mat-card  fxFlex="16" [style.overflow]="'auto'">
-        <mat-card-title>Tags</mat-card-title>
-        <mat-card-content>
-            <div fxLayout="column" fxLayoutGap="12px">
-              <div *ngFor="let tag of inventoryGetTagsResponse; let i = index">
-                <button mat-raised-button color="#0071C5" (click)="getTagInfo(tag)" [style.background-color]="'#0071C5'" [style.color]="'white'">
-                  {{tag.epc}}
-                </button>
-            </div>
-            </div>
-          <br>
-        </mat-card-content>
-      </mat-card>
-  <div fxLayout="column" fxLayoutGap="20px" fxFlex="15">
-    <mat-card  [style.overflow]="'auto'" [style.padding.px]="5" >
+  <mat-card fxFlex=20 [style.overflow]="'auto'">
+    <mat-card-title>Tags ({{tagCount}})</mat-card-title>
+    <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+    <mat-card-content>
+      <div fxLayout="column" fxLayoutGap="12px">
+        <mat-nav-list color="primary"  >
+          <mat-list-item *ngFor="let t of inventoryGetTagsResponse; let i = index"  [ngClass]="{'active':tag?.epc === t.epc}" (click)="getTagInfo(t)">
+            <mat-icon matListIcon>label</mat-icon>
+            <p mat-line>{{t.epc}}</p>
+            <p mat-line> Last Read: {{t.last_read | date:'short'}} </p>
+            <!-- <button mat-raised-button color="#0071C5" [style.background-color]="'#0071C5'"
+              [style.color]="'white'">
+          
+            </button> -->
+          </mat-list-item>
+        </mat-nav-list>
+      </div>
+      <br>
+    </mat-card-content>
+  </mat-card>
+  <div fxLayout="column" fxFlex=30>
+    <mat-card>
       <mat-card-title>Sensors</mat-card-title>
+      <mat-card-subtitle>&nbsp;</mat-card-subtitle>
       <mat-card-content>
-          <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-          <div *ngFor="let sensorId of sensorIds;let i=index" fxLayout="column" fxLayoutGap="12px">
-            <h3 *ngIf="!loading" >{{sensorId}}</h3>
-            <button *ngIf="!loading" fxFlex="25" style="height:125px;width:125px" mat-fab [ngStyle]="{'background-color': isCurrentLocation(sensorId) ? '#0071C5' : '#b1babf', 'font-size': '48px'}">{{checkmark}}</button>
-            <img *ngIf="i==0 && tempRead != ''" src="../assets/icons8-temperature-48.png" style="height:48px;width:48px" />
-            <span *ngIf="i==0 && tempRead != ''" style="font-weight: bold">{{tempRead}}°F</span>
-          </div>
+        <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+        <mat-list>
+          <mat-list-item *ngFor="let sensorId of sensorIds;let i=index"
+            [ngClass]="{'active': isCurrentLocation(sensorId) === true}">
+            <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === true">check_circle_outline</mat-icon>
+            <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === false">check_circle</mat-icon>
+            <div fxLayout="row" fxFlexFill fxLayoutAlign="center center">
+              <div fxFlex=100 *ngIf="!loading">{{sensorId}}</div>
+              <div fxFlex=20 fxFlexAlign="end end" *ngIf="i==0 && tempRead != ''"
+                style="font-weight: bold;text-align: right;margin-right:30px;">
+                <div fxLayout="row" fxLayoutAlign="center">
+                  <img matListAvatar src="../assets/icons8-temperature-48.png" alt="">
+                  {{tempRead}}°F
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
       </mat-card-content>
     </mat-card>
   </div>
   <br>
-  <div fxLayout="column" fxLayoutGap="20px" fxFlex="45">
-      <mat-card  [style.overflow]="'auto'" [style.padding.px]="5" >
-        <mat-card-title>Info</mat-card-title>
-        <mat-card-content>
-            <mat-progress-spinner mode="indeterminate" *ngIf="loadingTags"></mat-progress-spinner>
-            <div fxLayout="column" fxLayoutGap="12px">
-                <ngx-json-viewer *ngIf="tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()"></ngx-json-viewer>
-            </div>
-        </mat-card-content>
-      </mat-card>
+  <div fxLayout="column" fxFlex=50>
+    <mat-card>
+      <mat-card-title>Info</mat-card-title>
+      <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+      <mat-card-content>
+        <mat-progress-spinner mode="indeterminate" *ngIf="loadingTags"></mat-progress-spinner>
+        <div fxLayout="column" fxLayoutGap="12px">
+          <ngx-json-viewer *ngIf="tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()"></ngx-json-viewer>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

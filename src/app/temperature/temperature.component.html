@@ -1,18 +1,10 @@
 <h1 class="mat-h1">Temperature data</h1>
 
 <div fxLayout="row">
-<mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-    <mat-card fxFlex="85%" *ngIf="!loading">
-      <canvas baseChart 
-        [datasets]="lineChartData"
-        [labels]="lineChartLabels"
-        [options]="lineChartOptions"
-        [colors]="lineChartColors"
-        [legend]="lineChartLegend"
-        [chartType]="lineChartType" 
-        [plugins]="lineChartPlugins"> 
-      </canvas>
-    </mat-card>
+  <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+  <mat-card fxFlex="100" *ngIf="!loading">
+    <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+      [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+    </canvas>
+  </mat-card>
 </div>
-
-

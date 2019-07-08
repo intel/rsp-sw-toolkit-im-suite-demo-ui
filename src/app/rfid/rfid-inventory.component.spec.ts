@@ -8,9 +8,9 @@ describe('RFIDInventoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RFIDInventoryComponent ]
+      declarations: [RFIDInventoryComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

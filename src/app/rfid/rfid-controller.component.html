@@ -1,25 +1,27 @@
 <h1 class="mat-h1">RFID Controller Commands</h1>
 
-<div fxLayout="row" fxLayoutGap="12px">
-    <mat-card  fxFlex="20" [style.overflow]="'auto'" [style.height.px]="'315'" >
-        <mat-card-title>Commands</mat-card-title>
-        <mat-card-content>
-            <div fxLayout="column" fxLayoutGap="12px">
-            <button mat-raised-button color="primary"  *ngFor="let command of commands; let i = index" (click)="getCommandResponse(command)">
-              {{command.name}}
-            </button>
-            </div>
-          <br>
-        </mat-card-content>
-      </mat-card>
+<div fxLayout="row" fxLayoutGap="12px" >
+  <mat-card fxFlex="20">
+    <mat-card-title>Commands</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="column"  fxLayoutGap="12px" >
+        <button mat-raised-button color="primary" *ngFor="let command of commands; let i = index"
+          (click)="getCommandResponse(command)">
+          {{command.name}}
+        </button>
+      </div>
+      <br>
+    </mat-card-content>
+  </mat-card>
 
-    <div fxLayout="column" fxLayoutGap="12px" fxFlex="50">
-      <mat-card fxFlex="100%" [style.overflow]="'auto'" [style.padding.px]="5" >
-        <mat-card-title>Response</mat-card-title>
-        <mat-card-content>
-            <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-            <ngx-json-viewer *ngIf="!loading && commandResponse" [json]="commandResponse" [expanded]="false"></ngx-json-viewer>
-        </mat-card-content>
-      </mat-card>
-    </div>
+  <div fxLayout="column" fxFlex="80">
+    <mat-card fxFlex="100%">
+      <mat-card-title>Response</mat-card-title>
+      <mat-card-content>
+        <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
+        <ngx-json-viewer *ngIf="!loading && commandResponse" [json]="commandResponse" [expanded]="false">
+        </ngx-json-viewer>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
