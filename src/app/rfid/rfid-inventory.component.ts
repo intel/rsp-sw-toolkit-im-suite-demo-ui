@@ -7,6 +7,7 @@ import { ApiService } from '../services/api.service';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { Tag, LocationHistory } from './tag/tag-event';
 import { startWith, switchMap } from 'rxjs/operators';
+import { PageEvent } from '@angular/material';
 
 interface posItem {
   product_id: string;
@@ -38,6 +39,7 @@ export class RFIDInventoryComponent implements OnInit {
 
   controllerCommands: string[]
   inventoryGetTagsResponse: Tag[]
+  pagedList: Tag[]
   suspectItems: scaleItem[]
   scaleReading: scaleItem
   scaleTotal: any;
@@ -65,6 +67,11 @@ export class RFIDInventoryComponent implements OnInit {
   tempRead: string;
   tempFacility: string;
 
+  pageEvent: PageEvent;
+  setPageSize: number;
+  setStartIndex: number;
+  setEndIndex: number;
+
   constructor(private apiService: ApiService) {
     this.controllerCommands = []
     this.inventoryGetTagsResponse = []
@@ -73,12 +80,14 @@ export class RFIDInventoryComponent implements OnInit {
     this.scaleReading = {} as scaleItem
     this.expanded = false
     this.tempRead = ""
+    this.setStartIndex = 0
+    this.setEndIndex = 10
   }
 
   ngOnInit() {
 
     this.commands = this.apiService.getRfidControllerCommands()
-    this.apiService.myTempCommandsEventEmitter.subscribe((val) => { })
+    this.apiService.myTempCommandsEventEmitter.subscribe((val) => { })    
 
     interval(1000)
       .pipe(
@@ -92,6 +101,9 @@ export class RFIDInventoryComponent implements OnInit {
           for (var _i = 0; _i < response.length; _i++) {
             this.inventoryGetTagsResponse.push(response[_i])
           }
+         
+          this.pagedList = this.inventoryGetTagsResponse.slice(this.setStartIndex, this.setEndIndex)
+          
         });
     interval(1000)
       .pipe(
@@ -180,6 +192,16 @@ export class RFIDInventoryComponent implements OnInit {
     } else {
       this.expanded = true;
     }
+  }
+
+  OnPageChange(event: PageEvent){
+    this.pageEvent = event;
+    this.setStartIndex = event.pageIndex * event.pageSize;
+    this.setEndIndex = this.setStartIndex + event.pageSize;
+    if ( this.setEndIndex > this.inventoryGetTagsResponse.length) {
+      this.setEndIndex = this.inventoryGetTagsResponse.length
+    }
+    this.pagedList = this.inventoryGetTagsResponse.slice(this.setStartIndex, this.setEndIndex) ;
   }
 
 }
