@@ -20,6 +20,7 @@ export interface Tag{
     epc_context: string;
     confidence: number;
     temperature: string;
+    expanded?: boolean;
 }
 
 export interface LocationHistory{
