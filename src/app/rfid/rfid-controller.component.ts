@@ -72,6 +72,11 @@ export class RFIDControllerComponent implements OnInit {
       (message)=> {
         this.commandResponse = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);
         this.loading = false;
+      },
+      ( error )=>{
+        this.loading = false;
+        this.commandResponse = JSON.parse(JSON.stringify(error))
+        console.log(error)
       }
     )
   }
