@@ -1,37 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BufferService } from '../services/buffer.service';
-import { WebsocketService } from '../services/websocket.service';
 import { Subscription, interval } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { Tag, LocationHistory } from './tag/tag-event';
 import { startWith, switchMap } from 'rxjs/operators';
 import { PageEvent, MatTableDataSource } from '@angular/material';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import { element } from 'protractor';
-import {MatPaginator} from '@angular/material/paginator';
-
-interface posItem {
-  product_id: string;
-  product_name: string;
-  quantity: number;
-  quantity_unit: string;
-  unit_price: number;
-  reconciled: boolean;
-}
-interface scaleItem {
-  scale_id: string;
-  total: string;
-  delta: string;
-  event_time: string;
-  units: string;
-}
-interface data {
-  positems: Array<posItem>;
-  scaleitem: scaleItem;
-  suspectitems: Array<scaleItem>;
-}
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-rfid-inventory',
@@ -39,23 +14,19 @@ interface data {
   styleUrls: ['./rfid-inventory.component.scss', 'table-expandable-rows-example.css'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
 
 export class RFIDInventoryComponent implements OnInit {
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   controllerCommands: string[]
   inventoryGetTagsResponse: Tag[]
   pagedList: Tag[]
-  suspectItems: scaleItem[]
-  scaleReading: scaleItem
-  scaleTotal: any;
-  scaleUnit: any;
 
   sub: Subscription;
   http: any;
@@ -94,8 +65,6 @@ export class RFIDInventoryComponent implements OnInit {
     this.controllerCommands = []
     this.inventoryGetTagsResponse = []
     this.tagLocation = []
-    this.suspectItems = []
-    this.scaleReading = {} as scaleItem
     this.expanded = false
     this.expandCollapse = "collapse"
     this.open = "collapsed"
@@ -107,7 +76,7 @@ export class RFIDInventoryComponent implements OnInit {
   ngOnInit() {
 
     this.commands = this.apiService.getRfidControllerCommands()
-    this.apiService.myTempCommandsEventEmitter.subscribe((val) => { })    
+    this.apiService.myTempCommandsEventEmitter.subscribe((val) => { })
     this.dataSource = new MatTableDataSource()
     interval(1000)
       .pipe(
@@ -116,13 +85,10 @@ export class RFIDInventoryComponent implements OnInit {
       )
       .subscribe(
         (message) => {
-          // if(this.dataSource.data.length == 0){
-          //   this.inventoryGetTagsResponse = [];
-          // } 
           let response: Tag[] = (JSON.parse(JSON.stringify(message)).results);
           for (var _i = 0; _i < response.length; _i++) {
-            let index = this.dataSource.data.findIndex(x=>x.epc == response[_i].epc)
-            if (index == -1 ){
+            let index = this.dataSource.data.findIndex(x => x.epc == response[_i].epc)
+            if (index == -1) {
               this.dataSource.data.push(response[_i])
             } else {
               response[_i].expanded = this.dataSource.data[index].expanded
@@ -131,8 +97,7 @@ export class RFIDInventoryComponent implements OnInit {
           }
 
           this.dataSource.paginator = this.paginator;
-          // this.pagedList = this.inventoryGetTagsResponse.slice(this.setStartIndex, this.setEndIndex)
-          
+
         });
     interval(1000)
       .pipe(
@@ -223,33 +188,23 @@ export class RFIDInventoryComponent implements OnInit {
     }
   }
 
-  expandedOrCollapsed(element? : Tag) {
-    this.dataSource.data.map(function(x) {
-      if (element.epc != x.epc){
-      x.expanded = false
+  expandedOrCollapsed(element?: Tag) {
+    this.dataSource.data.map(function (x) {
+      if (element.epc != x.epc) {
+        x.expanded = false
       }
       return x
     })
     let index = this.dataSource.data.findIndex(x => x.epc == element.epc)
-    if (this.dataSource.data[index].expanded == undefined){
+    if (this.dataSource.data[index].expanded == undefined) {
       this.dataSource.data[index].expanded = true
     } else {
-      if (this.dataSource.data[index].expanded == true){
+      if (this.dataSource.data[index].expanded == true) {
         this.dataSource.data[index].expanded = false
       } else {
         this.dataSource.data[index].expanded = true
       }
     }
-  }
-
-  OnPageChange(event: PageEvent){
-    this.pageEvent = event;
-    this.setStartIndex = event.pageIndex * event.pageSize;
-    this.setEndIndex = this.setStartIndex + event.pageSize;
-    if ( this.setEndIndex > this.inventoryGetTagsResponse.length) {
-      this.setEndIndex = this.inventoryGetTagsResponse.length
-    }
-    this.pagedList = this.inventoryGetTagsResponse.slice(this.setStartIndex, this.setEndIndex) ;
   }
 
   applyFilter(filterValue: string) {

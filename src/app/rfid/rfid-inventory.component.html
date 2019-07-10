@@ -49,7 +49,7 @@
           </div>
           <div fxLayout="column" fxFlex=50>
             <mat-card>
-              <mat-card-title>Info</mat-card-title>
+              <mat-card-title>Detailed Tag Info</mat-card-title>
               <mat-card-subtitle>&nbsp;</mat-card-subtitle>
               <mat-card-content>
                 <div fxLayoutAlign="center center" fxFlexFill *ngIf="loading">
@@ -76,75 +76,3 @@
   </mat-table>
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
-
-<!--
-<div fxLayout="row wrap" fxLayoutGap="12px grid"  style="padding:12px">
-  <div fxLayout="column" fxFlex=22 fxFlex.lt-lg=50>
-    <mat-card>
-      <mat-card-title>Tags ({{tagCount}})</mat-card-title>
-      <mat-card-subtitle>&nbsp;</mat-card-subtitle>
-      <mat-card-content>
-        <mat-paginator [length]="inventoryGetTagsResponse.length"
-          [pageSize]="10"
-          [pageSizeOptions]="[5, 10, 25, 100]"
-          (page)="pageEvent = OnPageChange($event)">
-        </mat-paginator>
-        <div fxLayout="column" fxLayoutGap="12px">
-          <mat-nav-list color="primary">
-            <mat-list-item *ngFor="let t of pagedList; let i = index"
-              [ngClass]="{'active':tag?.epc === t.epc}" (click)="getTagInfo(t)">
-              <mat-icon matListIcon>label</mat-icon>
-              <p mat-line>{{t.epc}}</p>
-              <p mat-line> Last Read: {{t.last_read | date:'short'}} </p>
-
-            </mat-list-item>
-          </mat-nav-list>
-        </div>
-        <br>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <div fxLayout="column" fxFlex=30 fxFlex.lt-lg=50>
-    <mat-card>
-      <mat-card-title>Sensors</mat-card-title>
-      <mat-card-subtitle>&nbsp;</mat-card-subtitle>
-      <mat-card-content fxLayout="row wrap">
-
-        <div fxFlex=100 fxFlexFill fxLayoutAlign="center center" *ngIf="loading">
-          <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-        </div>
-
-        <mat-list fxFlex=100 [fxShow]="!loading">
-          <mat-list-item *ngFor="let sensorId of sensorIds;let i=index"
-            [ngClass]="{'active': isCurrentLocation(sensorId) === true}">
-            <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === true">check_circle_outline</mat-icon>
-            <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === false">check_circle</mat-icon>
-            <div fxLayout="row" fxFlexFill fxLayoutAlign="center center">
-              <div fxFlex=100>{{sensorId}}</div>
-              <div fxFlex=20 fxFlexAlign="end end" *ngIf="i==0 && tempRead != ''"
-                style="font-weight: bold;text-align: right;margin-right:30px;">
-                <div fxLayout="row" fxLayoutAlign="center">
-                  <img matListAvatar src="../assets/icons8-temperature-48.png" alt="">
-                  {{tempRead}}°F
-                </div>
-              </div>
-            </div>
-          </mat-list-item>
-        </mat-list>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <div fxLayout="column" fxFlex=40 fxFlex.lt-lg=100>
-    <mat-card>
-      <mat-card-title>Info</mat-card-title>
-      <mat-card-subtitle>&nbsp;</mat-card-subtitle>
-      <mat-card-content>
-        <mat-progress-spinner mode="indeterminate" *ngIf="loadingTags"></mat-progress-spinner>
-        <div [fxShow]="!loading" fxLayout="column" fxLayoutGap="12px">
-          <ngx-json-viewer *ngIf="tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()"></ngx-json-viewer>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div> -->
