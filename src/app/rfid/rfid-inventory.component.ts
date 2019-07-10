@@ -85,6 +85,7 @@ export class RFIDInventoryComponent implements OnInit {
   setStartIndex: number;
   setEndIndex: number;
   columnsToDisplay = ['epc', 'uri', 'last_read', 'product_id'];
+  columnAlias = ["EPC", "URI", "LAST READ", "PRODUCT ID"]
   expandedElement: Tag | null;
   open: string;
   dataSource: MatTableDataSource<Tag>;

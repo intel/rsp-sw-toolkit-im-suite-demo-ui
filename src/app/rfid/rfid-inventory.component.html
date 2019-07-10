@@ -3,7 +3,7 @@
 </mat-toolbar>
 
 <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search: 30143639F8419145BEEF0000">
 </mat-form-field>
   
 
@@ -11,8 +11,8 @@
 <table mat-table 
        [dataSource]="dataSource" multiTemplateDataRows
        class="mat-elevation-z8">
-  <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-    <th mat-header-cell *matHeaderCellDef fxFlex="400px"> {{column}} </th>
+  <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay; let i=index">
+    <th mat-header-cell *matHeaderCellDef fxFlex="400px"> {{columnAlias[i]}} </th>
     <td mat-cell *matCellDef="let element" fxFlex="400px"> {{element[column]}} </td>
   </ng-container>
 
@@ -22,8 +22,8 @@
       <div class="example-element-detail" [@detailExpand]="element.expanded ? 'element.expanded' : 'collapsed' " >
         <div class="example-element-description">
           <div  fxLayoutGap="5px grid"  style="padding:12px">
-            <div fxLayout="column" fxFlex=8 fxFlex.lt-lg=50>
-              <mat-card>
+            <div fxLayout="column" fxFlex=50 fxFlex.lt-lg=50>
+              <mat-card class="expand-card-sensor">
                 <mat-card-title>Sensors</mat-card-title>
                 <mat-card-subtitle>&nbsp;</mat-card-subtitle>
                 <mat-card-content>
@@ -53,7 +53,7 @@
               </mat-card>
             </div>
             <div fxLayout="column" fxFlex=8 fxFlex.lt-lg=10>
-              <mat-card>
+              <mat-card class="expand-card-info">
                 <mat-card-title>Info</mat-card-title>
                 <mat-card-subtitle>&nbsp;</mat-card-subtitle>
                 <mat-card-content>
