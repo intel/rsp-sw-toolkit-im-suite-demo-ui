@@ -3,82 +3,78 @@
 </mat-toolbar>
 
 <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search: 30143639F8419145BEEF0000">
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search: 30143639F8419145BEEF0000">
 </mat-form-field>
-  
+
 
 <div class="mat-elevation-z8">
-<table mat-table 
-       [dataSource]="dataSource" multiTemplateDataRows
-       class="mat-elevation-z8">
-  <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay; let i=index">
-    <th mat-header-cell *matHeaderCellDef fxFlex="400px"> {{columnAlias[i]}} </th>
-    <td mat-cell *matCellDef="let element" fxFlex="400px"> {{element[column]}} </td>
-  </ng-container>
+  <mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay; let i=index">
+      <mat-header-cell *matHeaderCellDef fxFlex="400px"> {{columnAlias[i]}} </mat-header-cell>
+      <mat-cell *matCellDef="let element" fxFlex="400px"> {{element[column]}} </mat-cell>
+    </ng-container>
 
-  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-  <ng-container matColumnDef="expandedDetail">
-    <td mat-cell *matCellDef="let element" >
-      <div class="example-element-detail" [@detailExpand]="element.expanded ? 'element.expanded' : 'collapsed' " >
-        <div class="example-element-description">
-          <div  fxLayoutGap="5px grid"  style="padding:12px">
-            <div fxLayout="column" fxFlex=50 fxFlex.lt-lg=50>
-              <mat-card class="expand-card-sensor">
-                <mat-card-title>Sensors</mat-card-title>
-                <mat-card-subtitle>&nbsp;</mat-card-subtitle>
-                <mat-card-content>
-          
-                  <div fxFlex=200 fxFlexFill fxLayoutAlign="center center" *ngIf="loading">
-                    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-                  </div>
-          
-                  <mat-list fxFlex=50 [fxShow]="!loading">
-                    <mat-list-item *ngFor="let sensorId of sensorIds;let i=index"
-                      [ngClass]="{'active': isCurrentLocation(sensorId) === true}">
-                      <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === true">check_circle_outline</mat-icon>
-                      <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === false">check_circle</mat-icon>
-                      <div fxLayout="row" fxFlexFill fxLayoutAlign="right center">
-                        <div fxFlex=100>{{sensorId}}</div>
-                        <div fxFlex=30 fxFlexAlign="end end" *ngIf="i==0 && tempRead != ''"
-                          style="font-weight: bold;text-align: right;margin-right:30px;">
-                          <div fxLayout="row" fxLayoutAlign="center">
-                            <img matListAvatar src="../assets/icons8-temperature-48.png" alt="">
-                            {{tempRead}}°F
-                          </div>
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let element">
+        <div fxLayout="row" fxFlex=100 class="example-element-detail"
+          [@detailExpand]="element.expanded ? 'element.expanded' : 'collapsed' ">
+          <div fxLayout="column" fxFlex=50>
+            <mat-card fxFlex=100>
+              <mat-card-title>Sensors</mat-card-title>
+              <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+              <mat-card-content>
+                <div fxFlexFill fxLayoutAlign="center center" *ngIf="loading">
+                  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+                </div>
+                <mat-list fxFlex=100 [fxShow]="!loading">
+                  <mat-list-item *ngFor="let sensorId of sensorIds;let i=index"
+                    [ngClass]="{'active': isCurrentLocation(sensorId) === true}">
+                    <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === true">check_circle_outline</mat-icon>
+                    <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === false">check_circle</mat-icon>
+                    <div fxLayout="row" fxFlexFill fxLayoutAlign="right center">
+                      <div fxFlex=100>{{sensorId}}</div>
+                      <div fxFlex=30 fxFlexAlign="end end" *ngIf="i==0 && tempRead != ''"
+                        style="font-weight: bold;text-align: right;margin-right:30px;">
+                        <div fxLayout="row" fxLayoutAlign="center">
+                          <img matListAvatar src="../assets/icons8-temperature-48.png" alt="">
+                          {{tempRead}}°F
                         </div>
                       </div>
-                    </mat-list-item>
-                  </mat-list>
-                </mat-card-content>
-              </mat-card>
-            </div>
-            <div fxLayout="column" fxFlex=8 fxFlex.lt-lg=10>
-              <mat-card class="expand-card-info">
-                <mat-card-title>Info</mat-card-title>
-                <mat-card-subtitle>&nbsp;</mat-card-subtitle>
-                <mat-card-content>
-                  <mat-progress-spinner mode="indeterminate" *ngIf="loadingTags"></mat-progress-spinner>
-                  <div [fxShow]="!loading" fxLayout="column" fxLayoutGap="12px">
-                    <ngx-json-viewer *ngIf="tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()"></ngx-json-viewer>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
+                    </div>
+                  </mat-list-item>
+                </mat-list>
+              </mat-card-content>
+            </mat-card>
           </div>
-        </div>
-      </div>
-    </td>
-  </ng-container>
+          <div fxLayout="column" fxFlex=50>
+            <mat-card>
+              <mat-card-title>Info</mat-card-title>
+              <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+              <mat-card-content>
+                <div fxLayoutAlign="center center" fxFlexFill *ngIf="loading">
+                  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+                </div>
+                <div [fxShow]="!loading" fxLayout="column" fxLayoutGap="12px">
+                  <ngx-json-viewer *ngIf="tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()">
+                  </ngx-json-viewer>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
 
-  <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
-  <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-      class="example-element-row"
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
       [class.example-expanded-row]="element.expanded"
       (click)="expandedElement = expandedElement === element ? null : element; getTagInfo(element); expandedOrCollapsed(element, expandedElement)">
-  </tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-</table>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </mat-row>
+    <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
 
 <!--
