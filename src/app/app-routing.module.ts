@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'rfid-inventory', component: RFIDInventoryComponent},
   { path: 'rfid-controller', component: RFIDControllerComponent },
   { path: 'rfid-dashboard', component: RFIDDashboardComponent},
+  { path: '', redirectTo: 'rfid-dashboard', pathMatch: 'full'},
   { path: 'ble', component: BleComponent },
   { path: 'temperature', component: TemperatureComponent },
 
