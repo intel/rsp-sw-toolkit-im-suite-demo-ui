@@ -2,15 +2,15 @@ table {
     width: 100%;
   }
   
-  tr.example-detail-row {
+  example-detail-row {
     height: 0;
   }
   
-  tr.example-element-row:not(.example-expanded-row):hover {
+  example-element-row:not(.example-expanded-row):hover {
     background: #777;
   }
   
-  tr.example-element-row:not(.example-expanded-row):active {
+  example-element-row:not(.example-expanded-row):active {
     background: #efefef;
   }
   
@@ -31,6 +31,10 @@ table {
     margin: 8px 0;
     height: 104px;
   }
+
+  .element-row:not(.expanded) {
+  cursor: pointer;
+}
   
   .example-element-symbol {
     font-weight: bold;
@@ -63,3 +67,8 @@ table {
   .expand-card-sensor {
     width: 450px;
   }
+
+  .vision-statement {
+    font-size: 8px;
+  }
+  
