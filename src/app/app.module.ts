@@ -14,6 +14,7 @@ import { BleComponent } from './ble/ble.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RFIDInventoryComponent} from './rfid/rfid-inventory.component';
 import { RFIDControllerComponent } from './rfid/rfid-controller.component';
+import { RFIDDashboardComponent } from './rfid/rfid-dashboard.component';
 import { ApiService } from './services/api.service';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
@@ -26,6 +27,7 @@ import { ChartsModule } from 'ng2-charts';
     TheftDetectionComponent,
     RFIDControllerComponent,
     RFIDInventoryComponent,
+    RFIDDashboardComponent,
     BleComponent,
     TemperatureComponent
   ],

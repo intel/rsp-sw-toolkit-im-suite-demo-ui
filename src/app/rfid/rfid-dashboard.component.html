@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <h1 class="mat-h1">RSP Dashboard</h1>
+</mat-toolbar>
+<div fxLayout="row" fxLayoutGap="12px" style="padding:12px">
+  <mat-card fxFlex="10">
+    <mat-card-title fxLayoutAlign="center center">Tag Count</mat-card-title>
+    <mat-card-content routerLink = "/rfid-inventory">
+      <div fxFlexFill fxLayoutAlign="center center">
+        <h1>{{tagCount}}</h1>
+      </div>
+      <br>
+    </mat-card-content>
+  </mat-card>
+</div>
