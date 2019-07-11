@@ -15,9 +15,9 @@
     </ng-container>
 
     <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-    <ng-container matColumnDef="expandedDetail">
+    <ng-container matColumnDef="expandedDetail" >
       <mat-cell *matCellDef="let element">
-        <div fxLayout="row" fxFlex=100 class="example-element-detail"
+        <div  fxFlex=100 class="example-element-detail" style="overflow: hidden"
           [@detailExpand]="element.expanded ? 'element.expanded' : 'collapsed' ">
           <div fxLayout="column" fxFlex=50 >
             <mat-card fxFlex=100>
