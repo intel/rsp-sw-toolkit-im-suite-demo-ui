@@ -78,11 +78,8 @@ export class RFIDInventoryComponent implements OnInit {
     this.commands = this.apiService.getRfidControllerCommands()
     this.apiService.myTempCommandsEventEmitter.subscribe((val) => { })
     this.dataSource = new MatTableDataSource()
-    interval(1000)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags?$orderby=epc asc`))
-      )
+
+    this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags?$orderby=epc asc`)
       .subscribe(
         (message) => {
           let response: Tag[] = (JSON.parse(JSON.stringify(message)).results);
@@ -95,18 +92,9 @@ export class RFIDInventoryComponent implements OnInit {
               this.dataSource.data[index] = response[_i]
             }
           }
-
+          // this.dataSource.data = response;
           this.dataSource.paginator = this.paginator;
 
-        });
-    interval(1000)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.apiService.getCommands(`http://127.0.0.1:8090/inventory/tags/?$count`))
-      )
-      .subscribe(
-        (message) => {
-          this.tagCount = (JSON.parse(JSON.stringify(message)).count)
         });
   }
 
@@ -119,7 +107,13 @@ export class RFIDInventoryComponent implements OnInit {
   getTagInfo(tagInfo: Tag) {
     this.tag = JSON.parse(JSON.stringify(tagInfo))
     let sensorGetDeviceIdCommand = this.commands.find(x => x.name == "sensor_get_device_ids")
-    let temp = this.apiService.temperatureCommands.find(x => x.name == "CurrentTemperature")
+    let temp
+    try{
+      temp = this.apiService.temperatureCommands.find(x => x.name == "CurrentTemperature")
+    }
+    catch(err){
+      console.log(err)
+    }
 
     this.loading = true;
     this.apiService.getCommandResponse(sensorGetDeviceIdCommand)
