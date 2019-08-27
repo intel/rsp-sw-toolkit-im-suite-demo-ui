@@ -24,7 +24,7 @@ export class ApiService {
 
   getRfidControllerCommands(): any[] {
     this.controllerCommands = []
-    this.client.get(`http://127.0.0.1:48082/api/v1/device/name/rrs-gateway`)
+    this.client.get(`http://127.0.0.1:48082/api/v1/device/name/rsp-controller`)
       .subscribe(
         (message) => {
           let commandArray: any[] = JSON.parse(JSON.stringify(message)).commands
