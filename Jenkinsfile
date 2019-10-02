@@ -34,7 +34,7 @@ node {
         stage('Build') {
             docker.image('amr-registry.caas.intel.com/rrp-devops/nodejs-build-agent:10.1-slim').inside {
                 withEnv(proxyEnvVars) {
-                    sh 'npm run postinstall && npm run build'
+                    sh 'npm run build'
                 }
             }
 
