@@ -3,18 +3,15 @@ def notify = [
     slack: [ success: '#ima-build-success', failure: '#ima-build-failed' ]
 ]
 
-def checkmarxBranchId = '3973'
-def checkmarxScanCredentialId = 'sys_aimsengr'
-
 def proxyEnvVars = [
     'http_proxy=http://proxy-chain.intel.com:911',
     'https_proxy=http://proxy-chain.intel.com:912'
 ]
 
-def _projectKey = 'management-console-ui'
+def _projectKey = 'edgex-demo-ui'
 def _skipInfra = false
 
-def doNotSkipAnalysisBranchName = 'develop'
+def doNotSkipAnalysisBranchName = 'master'
 
 node {
     try {
@@ -31,7 +28,7 @@ node {
                 }
             }
 
-            junit testResults: 'TESTS-*.xml', allowEmptyResults: true
+            //junit testResults: 'TESTS-*.xml', allowEmptyResults: true
         }
 
         stage('Build') {
@@ -41,45 +38,22 @@ node {
                 }
             }
 
-            junit testResults: 'TESTS-*.xml', allowEmptyResults: true
+            //junit testResults: 'TESTS-*.xml', allowEmptyResults: true
         }
 
         //only run static code analysis on master branch
         if(env.GIT_BRANCH == doNotSkipAnalysisBranchName) {
-            stage('SonarQube Scan') {
-                sonarQubeScan {
-                    projectKey = 'management-console-ui'
-                    projectName = 'Management Console UI'
-                    scannerType = 'javascript'
-                }
-            }
+            stage('Static Code Analysis') {
+                staticCodeScan {
+                    scanners             = ['checkmarx', 'protex']
 
-            stage('Checkmarx Scan') {
-                withCredentials([
-                    usernamePassword(credentialsId: checkmarxScanCredentialId,
-                                    passwordVariable: 'CXPASSWORD',
-                                    usernameVariable: 'CXUSERNAME')
-                ]) {
-                    def u = "${env.CXUSERNAME}"
-                    def p = "${env.CXPASSWORD}"
-                    itCheckmarxScan {
-                        branchId = checkmarxBranchId
-                        username = u
-                        password = p
-                    }
-                }
-            }
+                    // Protex
+                    protexBuildName      = 'rrp-generic-protex-build'
+                    protexProjectName    = 'bb-edgex-demo-ui'
 
-            stage('Protex Scan') {
-                build(
-                    job: 'rrs-generic-protex-build',
-                    parameters: [
-                        string(name: 'PROTEX_GIT_REPO', value: scm.userRemoteConfigs.url[0]),
-                        string(name: 'PROTEX_GIT_BRANCH', value: env.GIT_BRANCH.replaceAll('origin/', '')),
-                        string(name: 'PROTEX_PROJECT_NAME', value: 'RSP-mgt_console_angular'),
-                        string(name: 'PROTEX_SOURCE_PATH', value: '.')
-                    ]
-                )
+                    //Checkmarx
+                    checkmarxProjectName = 'RBHE-CodePipeline-EdgexDemoUI'
+                }
             }
         }
 
@@ -92,7 +66,7 @@ node {
 
                     useDevOpsManagedTemplate = 'ecr-repo-setup'
                     infra = [
-                        stackName: 'RRS-Codepipeline-ManagementConsoleUI'
+                        stackName: 'RBHE-CodePipeline-EdgexDemoUI'
                     ]
                 }
             }
