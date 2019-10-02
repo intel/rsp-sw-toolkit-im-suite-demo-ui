@@ -24,7 +24,7 @@ node {
         stage('Tests') {
             docker.image('amr-registry.caas.intel.com/rrp-devops/nodejs-build-agent:10.1-slim').inside {
                 withEnv(proxyEnvVars) {
-                    sh 'npm install -g npm@5.6.0 && npm install --verbose && npm run postinstall && npm run test-ci'
+                    sh 'npm install -g npm@6.7.0 && npm install --verbose && install -g @angular/cli@8.0.2'
                 }
             }
 
