@@ -1,7 +1,7 @@
-export interface TagResults{
-    results: Tag[]
+export interface TagResults {
+    results: Tag[];
 }
-export interface Tag{
+export interface Tag {
     uri: string;
     epc: string;
     product_id: string;

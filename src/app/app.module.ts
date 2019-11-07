@@ -1,16 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatButtonModule, MatInputModule, MatFormFieldModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule, MatPaginatorModule, MatTableModule } from '@angular/material';
-import { TheftDetectionComponent } from './theft-detection/theft-detection.component';
-import { BufferService } from './services/buffer.service';
-import { WebsocketService } from './services/websocket.service';
-import { BleComponent } from './ble/ble.component';
+import {
+  MatButtonModule,
+  MatInputModule,
+  MatFormFieldModule,
+  MatCheckboxModule,
+  MatToolbarModule,
+  MatSidenavModule,
+  MatMenuModule,
+  MatIconModule,
+  MatListModule,
+  MatCardModule,
+  MatPaginatorModule,
+  MatTableModule,
+  MatDatepickerModule, MatNativeDateModule
+} from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { RFIDInventoryComponent} from './rfid/rfid-inventory.component';
 import { RFIDControllerComponent } from './rfid/rfid-controller.component';
@@ -20,33 +31,53 @@ import { MatProgressSpinnerModule } from '@angular/material';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { TemperatureComponent } from './temperature/temperature.component';
 import { ChartsModule } from 'ng2-charts';
+import { NotifsFoodSafetyComponent} from './notifications/food-safety/food-safety.component';
+import {AppConfigService} from './services/app-config-service';
+
+
+
+const appInitializer = (appConfig: AppConfigService) => {
+  return () => {
+    return appConfig.loadAppConfig();
+  };
+};
 
 @NgModule({
   declarations: [
     AppComponent,
-    TheftDetectionComponent,
     RFIDControllerComponent,
     RFIDInventoryComponent,
     RFIDDashboardComponent,
-    BleComponent,
-    TemperatureComponent
+    TemperatureComponent,
+    NotifsFoodSafetyComponent
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatButtonModule, MatTableModule, MatPaginatorModule, MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule,
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule, MatTableModule, MatPaginatorModule,
+    MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule,
     FlexLayoutModule,
-    MatProgressSpinnerModule, MatFormFieldModule,MatInputModule,
+    MatProgressSpinnerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,
     NgxJsonViewerModule,
     ChartsModule
   ],
   providers: [
-    BufferService,
-    WebsocketService,
-    ApiService
+    RFIDDashboardComponent,
+    ApiService,
+    AppConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializer,
+      multi: true,
+      deps: [AppConfigService]
+    }
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

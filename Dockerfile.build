@@ -1,0 +1,15 @@
+FROM zenika/alpine-chrome:with-node
+
+WORKDIR /app
+
+USER root
+
+RUN apk add --update sudo@edge \
+  && npm install -g @angular/cli@8.0.2 \
+  && mkdir /npm-cache \
+  && npm config --global set cache /npm-cache \
+  && chmod 777 /npm-cache
+
+VOLUME [ "/npm-cache" ]
+
+USER chrome

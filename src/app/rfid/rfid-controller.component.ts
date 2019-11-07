@@ -1,33 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { BufferService } from '../services/buffer.service';
-import { WebsocketService } from '../services/websocket.service';
 import { Subscription, Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
 
-
-
-interface posItem {
-  product_id: string;
-  product_name: string;
-  quantity: number;
-  quantity_unit: string;
-  unit_price: number;
-  reconciled: boolean;
-}
-interface scaleItem {
-  scale_id: string;
-  total: string;
-  delta: string;
-  event_time: string;
-  units: string;
-}
-interface data {
-  positems: Array<posItem>;
-  scaleitem: scaleItem;
-  suspectitems: Array<scaleItem>;
-}
 
 @Component({
   selector: 'app-rfid-controller',
@@ -36,9 +11,9 @@ interface data {
 })
 export class RFIDControllerComponent implements OnInit {
 
-  commands: any[]
-  controllerCommands: string[]
-  commandResponse: any
+  commands: any[];
+  controllerCommands: string[];
+  commandResponse: any;
 
   sub: Subscription;
   http: any;
@@ -46,38 +21,54 @@ export class RFIDControllerComponent implements OnInit {
   client: HttpClient;
   loading: boolean;
   loadingCommands: boolean;
-  controllerCommandsResponseObservable : Observable <any[]>
+  controllerCommandsResponseObservable: Observable <any[]>;
 
 
   constructor(private apiService: ApiService) {
-    this.controllerCommands = []
+    this.controllerCommands = [];
+    this.commands = [];
   }
 
   ngOnInit() {
-    this.commands = this.apiService.getRfidControllerCommands()
-    console.log(this.commands)
+    this.getCommands();
+    console.log(this.commands);
   }
-  
+
   ngOnDestroy() {
-    if(this.sub) {
+    if (this.sub) {
       this.sub.unsubscribe();
     }
   }
 
-  getCommandResponse(command: any){
-    this.commandResponse = <any>{}
+  async getCommands() {
+    const deviceCommandRegistration = await this.apiService.getRfidControllerCommandRegistration().toPromise();
+    this.commands = deviceCommandRegistration.commands;
+  }
+
+  getCommandResponse(command: any) {
+    this.commandResponse = {} as any;
     this.loading = true;
     this.apiService.getCommandResponse(command)
     .subscribe(
-      (message)=> {
-        this.commandResponse = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);
+      (message) => {
+
+        if (command ===  'gpio_clear_mappings' || command.name === 'inventory_unload') {
+          this.commandResponse = 'OK';
+        } else {
+          this.commandResponse = JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(message)).readings))[0].value);
+        }
+        if (command.name === 'cluster_get_config' && this.commandResponse === null) {
+          this.commandResponse = 'No cluster configuration.';
+        }
+        console.log(this.commandResponse)
+        console.log(message)
         this.loading = false;
       },
-      ( error )=>{
+      ( error ) => {
         this.loading = false;
-        this.commandResponse = JSON.parse(JSON.stringify(error))
-        console.log(error)
+        this.commandResponse = JSON.parse(JSON.stringify(error));
+        console.log(error);
       }
-    )
+    );
   }
 }

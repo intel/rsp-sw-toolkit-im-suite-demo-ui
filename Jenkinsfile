@@ -22,24 +22,33 @@ node {
         }
 
         stage('Tests') {
-            docker.image('amr-registry.caas.intel.com/rrp-devops/nodejs-build-agent:10.1-slim').inside {
-                withEnv(proxyEnvVars) {
-                    sh 'npm install -g npm@6.7.0 && npm install --verbose && npm install -g @angular/cli@8.0.2'
+            withEnv(proxyEnvVars) {
+                // this image has problems running as root, so we have to do some sudo shennanigans
+                def buildImage = docker.build('edgex-demo-ui-builder:latest', '-f Dockerfile.build --build-arg http_proxy --build-arg https_proxy .')
+
+                sh 'chown -R 1000:1000 .'
+
+                buildImage.inside {
+                    sh 'sudo -Eu chrome npm install'
+                    sh 'sudo -Eu chrome ng test --codeCoverage=true --watch=false'
                 }
+
+                sh 'chown -R root:root .'
             }
 
-            //junit testResults: 'TESTS-*.xml', allowEmptyResults: true
+            // archiveArtifacts allowEmptyArchive: true, artifacts: '**/coverage/*', caseSensitive: false, defaultExcludes: false, fingerprint: true
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/edgex-ui', reportFiles: 'index.html', reportName: 'Angular Coverage Report', reportTitles: ''])
         }
 
-        stage('Build') {
+        /*stage('Build') {
             docker.image('amr-registry.caas.intel.com/rrp-devops/nodejs-build-agent:10.1-slim').inside {
                 withEnv(proxyEnvVars) {
                     sh 'npm run build'
                 }
             }
 
-            //junit testResults: 'TESTS-*.xml', allowEmptyResults: true
-        }
+            junit testResults: 'TESTS-*.xml', allowEmptyResults: true
+        }*/
 
         //only run static code analysis on master branch
         if(env.GIT_BRANCH == doNotSkipAnalysisBranchName) {
@@ -58,7 +67,7 @@ node {
         }
 
         if(!_skipInfra) {
-            //Check to see if there is any infratructure that needs to be created or updated
+            //Check to see if there is any infrastructure that needs to be created or updated
             stage('Cloud Infrastructure') {
                 rrpCloudFormation {
                     projectKey = _projectKey

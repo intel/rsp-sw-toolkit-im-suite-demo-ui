@@ -2,9 +2,20 @@
   <h1 class="mat-display-1">RSP Inventory</h1>
 </mat-toolbar>
 
-<mat-form-field>
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search: 30143639F8419145BEEF0000">
-</mat-form-field>
+<form class="date-block" [formGroup]="searchForm">
+  <div fxLayout="row" fxLayoutGap="12px"  style="padding:12px">
+    <mat-form-field>
+      <input
+        minlength="1"
+        maxlength="24"
+        formControlName="epc"
+        matInput (keyup)="applyFilter($event.target.value)"
+        placeholder="Search: 30143639F8419145BEEF0000">
+      <mat-error *ngIf="searchForm.get('epc').hasError('pattern')">EPC must be alphanumeric. No special characters</mat-error>
+      <mat-error *ngIf="searchForm.get('epc').hasError('maxLength')">Cannot be more than 24 characters.</mat-error>
+    </mat-form-field>
+  </div>
+</form>
 
 
 <div class="mat-elevation-z8">
@@ -28,21 +39,24 @@
                   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
                 </div>
                 <mat-list fxFlex=100 [fxShow]="!loading">
-                  <mat-list-item *ngFor="let sensorId of sensorIds;let i=index"
-                    [ngClass]="{'active': isCurrentLocation(sensorId) === true}">
-                    <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === true">check_circle_outline</mat-icon>
-                    <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === false">check_circle</mat-icon>
-                    <div fxLayout="row" fxFlexFill fxLayoutAlign="right center">
-                      <div fxFlex=100>{{sensorId}}</div>
-                      <div fxFlex=30 fxFlexAlign="end end" *ngIf="i==0 && tempRead != ''"
-                        style="font-weight: bold;text-align: right;margin-right:30px;">
-                        <div fxLayout="row" fxLayoutAlign="center">
-                          <img matListAvatar src="../assets/icons8-temperature-48.png" alt="">
-                          {{tempRead}}°F
+                  <ng-container *ngFor="let bsi of basicSensorInfo; let x=index">
+                    <mat-list-item > {{bsi.sensor}} </mat-list-item>
+                    <mat-list-item *ngFor="let alias of bsi.aliases;let i=index"
+                      [ngClass]="{'active': isCurrentLocation(alias) === true}">
+                      <mat-icon matListIcon *ngIf="isCurrentLocation(alias) === true">check_circle_outline</mat-icon>
+                      <mat-icon matListIcon *ngIf="isCurrentLocation(alias) === false">check_circle</mat-icon>
+                      <div fxLayout="row" fxFlexFill fxLayoutAlign="right center">
+                        <div fxFlex=100>{{alias}}</div>
+                        <div fxFlex=30 fxFlexAlign="end end" *ngIf="i==0 && tempRead != ''"
+                          style="font-weight: bold;text-align: right;margin-right:30px;">
+                          <div fxLayout="row" fxLayoutAlign="center">
+                            <img matListAvatar src="../assets/icons8-temperature-48.png" alt="">
+                            {{tempRead}}°F
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </mat-list-item>
+                    </mat-list-item>
+                  </ng-container>
                 </mat-list>
               </mat-card-content>
             </mat-card>
@@ -72,7 +86,7 @@
       [class.example-expanded-row]="element.expanded"
       (click)="expandedElement = expandedElement === element ? null : element; getTagInfo(element); expandedOrCollapsed(element, expandedElement)">
     </mat-row>
-    <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
+    <mat-row [fxShow]="showRow" *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
   </mat-table>
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>

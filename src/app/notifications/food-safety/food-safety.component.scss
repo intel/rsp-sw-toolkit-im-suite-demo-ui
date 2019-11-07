@@ -1,0 +1,27 @@
+.unreconciled {
+  border: 1px solid red;
+  background-color: yellow;
+}
+
+.bold {
+  font-weight: bold;
+}
+.active{
+  background-color:lightgray;
+}
+.mat-card{
+  min-height:500px;
+}
+
+form{
+  padding-bottom: 30px;
+}
+
+.date-block{
+  display: flex;
+}
+
+.aligned-submit-button{
+  height:48px !important;
+   margin-top: 10px;
+}

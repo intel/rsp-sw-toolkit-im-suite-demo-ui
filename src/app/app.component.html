@@ -1,14 +1,14 @@
-<mat-toolbar>
+<mat-toolbar style="background-color:#DCDCDC">
   <div fxLayout="row wrap" fxFlex="100">
     <div fxFlex="50" fxLayoutAlign="start center">
-      <img src="../assets/logo_ef.png" height="30" />
+      DEMO UI
     </div>
     <div fxFlex="50" fxLayoutAlign="end center" class="vision-statement">
       <i>"Inspire innovation to enhance all aspects of life"</i>
     </div>
   </div>
 </mat-toolbar>
-<mat-drawer-container>
+<mat-drawer-container >
   <mat-drawer mode="side" style="min-width: 200px;" opened>
     <mat-nav-list>
       <mat-list-item>
@@ -41,6 +41,14 @@
             <mat-icon>opacity</mat-icon>
           </button>
           Temperature
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a matLine routerLink="/food-safety"  routerLinkActive="active-link">
+          <button mat-icon-button>
+            <mat-icon>fastfood</mat-icon>
+          </button>
+          Food Safety
         </a>
       </mat-list-item>
     </mat-nav-list>
