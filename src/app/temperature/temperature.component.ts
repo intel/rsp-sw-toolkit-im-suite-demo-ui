@@ -87,11 +87,11 @@ export class TemperatureComponent implements OnInit {
           this.lineChartLabels = this.labelData;
 
           this.loading = false;
-          this.getRealTimeData(temperatureDevice)
+          this.getRealTimeData(temperatureDevice);
         }
       );
 
-    
+
     }
   }
 
@@ -106,15 +106,15 @@ export class TemperatureComponent implements OnInit {
     .subscribe(
       (message) => {
         const result: any[] = JSON.parse(JSON.stringify(message));
-        if(result.length > 0){
+        if (result.length > 0) {
             this.lineChartData.forEach((x, i) => {
-                const temp =+parseFloat(TemperatureComponent.base64ToFloat(result[0].value))
+                const temp = +parseFloat(TemperatureComponent.base64ToFloat(result[0].value));
                 const data: number[] = x.data as number[];
                 data.push(temp);
               });
-              const date = new Date();
-              this.lineChartLabels.push(this.timestampToDate(date));
-        }      
+            const date = new Date();
+            this.lineChartLabels.push(this.timestampToDate(date));
+        }
       });
   }
 

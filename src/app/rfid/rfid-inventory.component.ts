@@ -11,6 +11,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CustomValidators} from '../shared/custom-validators';
 import {DatePipe} from '@angular/common';
 import {Command} from '../commands/command';
+import {AppConfigService} from '../services/app-config-service';
 
 @Component({
   selector: 'app-rfid-inventory',
@@ -26,6 +27,23 @@ import {Command} from '../commands/command';
 })
 
 export class RFIDInventoryComponent implements OnInit {
+
+
+  constructor(private apiService: ApiService, private builder: FormBuilder, private appConfigService: AppConfigService) {
+    this.controllerCommands = [];
+    this.inventoryGetTagsResponse = [];
+    this.tagLocation = [];
+    this.expanded = false;
+    this.showRow = false;
+    this.expandCollapse = 'collapse';
+    this.open = 'collapsed';
+    this.tempRead = '';
+    this.setStartIndex = 0;
+    this.setEndIndex = 10;
+    this.commands = [];
+    this.aliasesArr = [];
+    this.basicSensorInfo = [];
+  }
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   controllerCommands: string[];
@@ -51,6 +69,7 @@ export class RFIDInventoryComponent implements OnInit {
 
   tempRead: string;
   tempFacility: string;
+  freezerReaderName: string;
 
   pageEvent: PageEvent;
   setPageSize: number;
@@ -66,22 +85,14 @@ export class RFIDInventoryComponent implements OnInit {
   basicSensorInfo: SensorInfo[];
   searchForm: FormGroup;
 
-
-  constructor(private apiService: ApiService, private builder: FormBuilder) {
-    this.controllerCommands = [];
-    this.inventoryGetTagsResponse = [];
-    this.tagLocation = [];
-    this.expanded = false;
-    this.showRow = false;
-    this.expandCollapse = 'collapse';
-    this.open = 'collapsed';
-    this.tempRead = '';
-    this.setStartIndex = 0;
-    this.setEndIndex = 10;
-    this.commands = [];
-    this.aliasesArr = [];
-    this.basicSensorInfo = [];
-  }
+  private static base64ToFloat(base64: string): string {
+    return new DataView(Uint8Array.from(
+        Array.prototype.map.call(atob(base64),
+         c => c.charCodeAt(0)))
+         .buffer)
+         .getFloat32(0, false)
+         .toFixed(2);
+ }
 
  async ngOnInit() {
     this.getAliases();
@@ -131,7 +142,7 @@ export class RFIDInventoryComponent implements OnInit {
       const bsiResults = await this.apiService.getBasicSensorInfo(val);
       this.loading = false;
       const aliasesArr: string[] = JSON.parse(bsiResults).aliases;
-      const uniqueAliases: Set<string> = new Set(aliasesArr)
+      const uniqueAliases: Set<string> = new Set(aliasesArr);
       bsi = { sensor: val, aliases: uniqueAliases};
       this.basicSensorInfo.push(bsi);
     });
@@ -141,6 +152,10 @@ export class RFIDInventoryComponent implements OnInit {
 
     this.loading = false;
     this.tag = JSON.parse(JSON.stringify(tagInfo));
+
+    const configurationVariables = await this.appConfigService.getConfig();
+    const temperatureDevice = JSON.parse(JSON.stringify(configurationVariables)).temperatureDevice;
+    this.freezerReaderName = JSON.parse(JSON.stringify(configurationVariables)).freezerReaderName;
 
     let temp;
     try {
@@ -153,17 +168,20 @@ export class RFIDInventoryComponent implements OnInit {
 
     // Temperature reads
     interval(1000)
-      .pipe(
-        startWith(0),
-        switchMap((temp) => this.apiService.getCommandResponse(temp))
-      )
-      .subscribe(
-        (message) => {
-          this.tempRead = parseFloat((JSON.parse(JSON.stringify(message)).AnalogValue_40)).toFixed(2);
-        },
-        (error) => {
-          console.log('Temp undefined');
-        });
+    .pipe(
+      startWith(0),
+      switchMap(() => this.apiService.getCommands(`http://127.0.0.1:48080/api/v1/reading/name/Temperature/device/` + temperatureDevice + `/1`))
+    )
+    .subscribe(
+      (message) => {
+        const result: any[] = JSON.parse(JSON.stringify(message));
+        if (result.length > 0) {
+          this.tempRead = RFIDInventoryComponent.base64ToFloat(result[0].value);
+        }
+      },
+      (error) => {
+        console.log(error);
+      });
 
     this.loadingTags = true;
     interval(1000)
@@ -178,8 +196,7 @@ export class RFIDInventoryComponent implements OnInit {
           this.lastLocation = response[0].location_history[0].location;
           // Tie temperature sensor to first RSP sensor
           if (this.tempRead !== '' || this.tempRead !== undefined) {
-            this.tag.temperature = this.tempFacility ===
-            this.lastLocation.substring(0, this.lastLocation.length - 2) ? this.tempRead : 'N/A';
+            this.tag.temperature = this.freezerReaderName === this.lastLocation ? this.tempRead : 'N/A';
           }
           this.loadingTags = false;
         });

@@ -47,7 +47,7 @@
                       <mat-icon matListIcon *ngIf="isCurrentLocation(alias) === false">check_circle</mat-icon>
                       <div fxLayout="row" fxFlexFill fxLayoutAlign="right center">
                         <div fxFlex=100>{{alias}}</div>
-                        <div fxFlex=30 fxFlexAlign="end end" *ngIf="i==0 && tempRead != ''"
+                        <div fxFlex=30 fxFlexAlign="end end" *ngIf="freezerReaderName === alias && tempRead != ''"
                           style="font-weight: bold;text-align: right;margin-right:30px;">
                           <div fxLayout="row" fxLayoutAlign="center">
                             <img matListAvatar src="../assets/icons8-temperature-48.png" alt="">

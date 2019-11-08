@@ -1,4 +1,4 @@
-export interface Notification{
+export interface Notification {
   created: string;
   modified: number;
   id: string;

@@ -20,6 +20,7 @@ import {
   MatCardModule,
   MatPaginatorModule,
   MatTableModule,
+  MatGridListModule,
   MatDatepickerModule, MatNativeDateModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
@@ -33,6 +34,8 @@ import { TemperatureComponent } from './temperature/temperature.component';
 import { ChartsModule } from 'ng2-charts';
 import { NotifsFoodSafetyComponent} from './notifications/food-safety/food-safety.component';
 import {AppConfigService} from './services/app-config-service';
+import {LossPreventionComponent} from './loss-prevention/loss-prevention.component';
+import {VideoViewerComponent} from './loss-prevention/video-viewer.component';
 
 
 
@@ -49,7 +52,9 @@ const appInitializer = (appConfig: AppConfigService) => {
     RFIDInventoryComponent,
     RFIDDashboardComponent,
     TemperatureComponent,
-    NotifsFoodSafetyComponent
+    NotifsFoodSafetyComponent,
+    LossPreventionComponent,
+    VideoViewerComponent
   ],
   imports: [
     HttpClientModule,
@@ -59,7 +64,7 @@ const appInitializer = (appConfig: AppConfigService) => {
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    MatButtonModule, MatTableModule, MatPaginatorModule,
+    MatButtonModule, MatTableModule, MatPaginatorModule, MatGridListModule,
     MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule,
     FlexLayoutModule,
     MatProgressSpinnerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,

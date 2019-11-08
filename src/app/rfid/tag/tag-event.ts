@@ -23,7 +23,7 @@ export interface Tag {
     expanded?: boolean;
 }
 
-export interface LocationHistory{
+export interface LocationHistory {
     location: string;
     source: string;
     timestamp: number;

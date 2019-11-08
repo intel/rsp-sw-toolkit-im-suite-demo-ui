@@ -1,0 +1,33 @@
+<mat-toolbar color="primary">
+  <h1 class="mat-display-1">Loss Prevention</h1>
+</mat-toolbar>
+
+<div class="mat-elevation-z8" *ngIf="loading">
+  <div fxFlexFill fxLayoutAlign="center center" >
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+</div>
+
+<div class="container" fxLayout="row wrap" fxLayout.xs="column">
+  <mat-card *ngFor="let recording of this.recordingResponse?.recordings;">
+    <div [routerLink]="['view', {id: recording.folder_name}]" class="clickable">
+      <mat-card-header>
+        <mat-card-title>{{ recording.timestamp | date:'medium' }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <img [src]="getFullPath(recording.folder_name, recording.thumb)" fxLayout="center" />
+        <div>
+          <p><strong>Product ID:</strong> {{ recording.product_id }}</p>
+          <p><strong>EPC:</strong> {{ recording.epc }}</p>
+        </div>
+      </mat-card-content>
+    </div>
+    <mat-card-actions>
+      <button color="primary" mat-button disabled>SHARE</button>
+      <button color="primary" mat-button disabled>ARCHIVE</button>
+      <button color="warn" mat-button (click)="deleteRecording(recording.folder_name)">DELETE</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+

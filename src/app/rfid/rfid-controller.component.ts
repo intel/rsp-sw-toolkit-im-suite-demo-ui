@@ -60,8 +60,8 @@ export class RFIDControllerComponent implements OnInit {
         if (command.name === 'cluster_get_config' && this.commandResponse === null) {
           this.commandResponse = 'No cluster configuration.';
         }
-        console.log(this.commandResponse)
-        console.log(message)
+        console.log(this.commandResponse);
+        console.log(message);
         this.loading = false;
       },
       ( error ) => {

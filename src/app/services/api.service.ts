@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Command, DeviceCommandRegistration} from '../commands/command';
+import {RecordingResponse} from '../loss-prevention/recording-response';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +11,18 @@ export class ApiService {
   controllerCommands: any[];
   public temperatureCommands: any[];
   public myTempCommandsEventEmitter: EventEmitter<any[]>;
+  public recordingResponse: RecordingResponse;
+  public recordingsMap: Map<string, number>;
+  public myRecordingsEventEmitter: EventEmitter<RecordingResponse>;
 
   constructor(private client: HttpClient) {
     this.controllerCommands = [];
+    this.recordingsMap = new Map<string, number>();
     this.myTempCommandsEventEmitter = new EventEmitter<any[]>();
+    this.myRecordingsEventEmitter = new EventEmitter<RecordingResponse>();
 
     // Get EdgeX commands for 'KMC.BAC-121036CE01' virtual temperature sensor
-    //this.getTemperatureCommand('KMC.BAC-121036CE01');
+    // this.getTemperatureCommand('KMC.BAC-121036CE01');
   }
 
   getCommands(url: string) {
@@ -55,6 +61,26 @@ export class ApiService {
       );
   }
 
+  // TODO: do we need to make port configurable
+  getRecordingsList(): void {
+    this.client.get('http://127.0.0.1:9092/recordings')
+      .subscribe(
+        (message) => {
+          this.recordingsMap.clear();
+          this.recordingResponse = message as RecordingResponse;
+          // reverse them are we want to sort newest first descending
+          this.recordingResponse.recordings.reverse();
+          this.recordingResponse.recordings.forEach((item, index) => {
+            this.recordingsMap[item.folder_name] = index;
+          });
+          this.myRecordingsEventEmitter.emit(this.recordingResponse);
+        }
+      );
+  }
+
+  deleteRecording(foldername: string): Observable<object> {
+    return this.client.delete('http://127.0.0.1:9092/recordings/' + foldername);
+  }
 }
 
 
