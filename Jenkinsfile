@@ -40,16 +40,6 @@ node {
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/edgex-ui', reportFiles: 'index.html', reportName: 'Angular Coverage Report', reportTitles: ''])
         }
 
-        /*stage('Build') {
-            docker.image('amr-registry.caas.intel.com/rrp-devops/nodejs-build-agent:10.1-slim').inside {
-                withEnv(proxyEnvVars) {
-                    sh 'npm run build'
-                }
-            }
-
-            junit testResults: 'TESTS-*.xml', allowEmptyResults: true
-        }*/
-
         //only run static code analysis on master branch
         if(env.GIT_BRANCH == doNotSkipAnalysisBranchName) {
             stage('Static Code Analysis') {
@@ -58,7 +48,7 @@ node {
 
                     // Protex
                     protexBuildName      = 'rrp-generic-protex-build'
-                    protexProjectName    = 'bb-edgex-demo-ui'
+                    protexProjectName    = 'bb-demo-ui'
 
                     //Checkmarx
                     checkmarxProjectName = 'RBHE-CodePipeline-EdgexDemoUI'
