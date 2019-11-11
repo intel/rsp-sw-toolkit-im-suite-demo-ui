@@ -8,7 +8,7 @@ def proxyEnvVars = [
     'https_proxy=http://proxy-chain.intel.com:912'
 ]
 
-def _projectKey = 'edgex-demo-ui'
+def _projectKey = 'demo-ui'
 def _skipInfra = false
 
 def doNotSkipAnalysisBranchName = 'master'
@@ -24,7 +24,7 @@ node {
         stage('Tests') {
             withEnv(proxyEnvVars) {
                 // this image has problems running as root, so we have to do some sudo shennanigans
-                def buildImage = docker.build('edgex-demo-ui-builder:latest', '-f Dockerfile.build --build-arg http_proxy --build-arg https_proxy .')
+                def buildImage = docker.build('demo-ui-builder:latest', '-f Dockerfile.build --build-arg http_proxy --build-arg https_proxy .')
 
                 sh 'chown -R 1000:1000 .'
 
@@ -37,7 +37,7 @@ node {
             }
 
             // archiveArtifacts allowEmptyArchive: true, artifacts: '**/coverage/*', caseSensitive: false, defaultExcludes: false, fingerprint: true
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/edgex-ui', reportFiles: 'index.html', reportName: 'Angular Coverage Report', reportTitles: ''])
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/demo-ui', reportFiles: 'index.html', reportName: 'Angular Coverage Report', reportTitles: ''])
         }
 
         //only run static code analysis on master branch
@@ -51,7 +51,7 @@ node {
                     protexProjectName    = 'bb-demo-ui'
 
                     //Checkmarx
-                    checkmarxProjectName = 'RBHE-CodePipeline-EdgexDemoUI'
+                    checkmarxProjectName = 'RBHE-CodePipeline-DemoUI'
                 }
             }
         }
@@ -65,7 +65,7 @@ node {
 
                     useDevOpsManagedTemplate = 'ecr-repo-setup'
                     infra = [
-                        stackName: 'RBHE-CodePipeline-EdgexDemoUI'
+                        stackName: 'RBHE-CodePipeline-DemoUI'
                     ]
                 }
             }
