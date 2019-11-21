@@ -8,6 +8,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule, MatTableModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {AppConfigService} from "../services/app-config-service";
 
 @Injectable()
 class MockApiService { }
@@ -25,6 +26,7 @@ describe('RFIDInventoryComponent', () => {
         FlexLayoutModule, HttpClientTestingModule ],
       providers: [
         { provide: ApiService, useClass: MockApiService},
+        AppConfigService,
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
