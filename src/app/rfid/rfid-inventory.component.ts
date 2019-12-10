@@ -1,3 +1,9 @@
+/* Apache v2 license
+*  Copyright (C) <2019> Intel Corporation
+*
+*  SPDX-License-Identifier: Apache-2.0
+*/
+
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {interval, Subscription} from 'rxjs';
 import {ApiService} from '../services/api.service';

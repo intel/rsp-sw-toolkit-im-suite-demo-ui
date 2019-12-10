@@ -1,3 +1,9 @@
+/* Apache v2 license
+*  Copyright (C) <2019> Intel Corporation
+*
+*  SPDX-License-Identifier: Apache-2.0
+*/
+
 import {Component, OnInit} from '@angular/core';
 import {ApiService} from '../services/api.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';

@@ -1,3 +1,9 @@
+/* Apache v2 license
+*  Copyright (C) <2019> Intel Corporation
+*
+*  SPDX-License-Identifier: Apache-2.0
+*/
+
 // tslint:disable
 import { TestBed } from '@angular/core/testing';
 import {Injectable, NO_ERRORS_SCHEMA} from '@angular/core';
