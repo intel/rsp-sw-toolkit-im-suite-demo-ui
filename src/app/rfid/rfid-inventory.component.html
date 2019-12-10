@@ -70,8 +70,7 @@
                   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
                 </div>
                 <div [fxShow]="!loading" fxLayout="column" fxLayoutGap="12px">
-                  <ngx-json-viewer *ngIf="tag" [json]="tag" [expanded]="expanded" (click)="clickedInfo()">
-                  </ngx-json-viewer>
+                  <pre *ngIf="tag">{{tag | json}}</pre>
                 </div>
               </mat-card-content>
             </mat-card>

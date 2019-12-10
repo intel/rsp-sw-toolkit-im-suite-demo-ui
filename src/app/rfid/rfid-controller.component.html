@@ -20,8 +20,9 @@
       <mat-card-title>Response</mat-card-title>
       <mat-card-content>
         <mat-progress-spinner mode="indeterminate" *ngIf="loading"></mat-progress-spinner>
-        <ngx-json-viewer *ngIf="!loading && commandResponse" [json]="commandResponse" [expanded]="false">
-        </ngx-json-viewer>
+        <pre *ngIf="!loading && commandResponse">
+          {{commandResponse | json }}
+        </pre>
       </mat-card-content>
     </mat-card>
   </div>

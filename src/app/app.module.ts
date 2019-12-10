@@ -68,7 +68,6 @@ const appInitializer = (appConfig: AppConfigService) => {
     MatCheckboxModule, MatToolbarModule, MatSidenavModule, MatMenuModule, MatIconModule, MatListModule, MatCardModule,
     FlexLayoutModule,
     MatProgressSpinnerModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,
-    NgxJsonViewerModule,
     ChartsModule
   ],
   providers: [
