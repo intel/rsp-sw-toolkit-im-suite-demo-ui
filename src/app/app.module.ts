@@ -35,7 +35,6 @@ import { RFIDControllerComponent } from './rfid/rfid-controller.component';
 import { RFIDDashboardComponent } from './rfid/rfid-dashboard.component';
 import { ApiService } from './services/api.service';
 import { MatProgressSpinnerModule } from '@angular/material';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { TemperatureComponent } from './temperature/temperature.component';
 import { ChartsModule } from 'ng2-charts';
 import { NotifsFoodSafetyComponent} from './notifications/food-safety/food-safety.component';
