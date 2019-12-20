@@ -5,7 +5,7 @@ WORKDIR /app
 USER root
 
 RUN apk add --update sudo@edge \
-  && npm install -g @angular/cli@8.0.2 \
+  && npm install -g @angular/cli@8.3.21 \
   && mkdir /npm-cache \
   && npm config --global set cache /npm-cache \
   && chmod 777 /npm-cache
