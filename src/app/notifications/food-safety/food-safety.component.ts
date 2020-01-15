@@ -8,13 +8,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../../services/api.service';
-import { PageEvent, MatTableDataSource, MatDatepickerInputEvent} from '@angular/material';
+import { MatTableDataSource, MatDatepickerInputEvent} from '@angular/material';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatPaginator } from '@angular/material/paginator';
 import { Notification } from '../notification/notification';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import {CustomValidators} from '../../shared/custom-validators';
+// import { RFIDInventoryComponent } from '../../rfid/rfid-inventory.component';
 
 @Component({
   selector: 'app-food-safety',
@@ -30,7 +31,7 @@ import {CustomValidators} from '../../shared/custom-validators';
   ],
 })
 
-export class NotifsFoodSafetyComponent implements OnInit {
+export class NotifyFoodSafetyComponent implements OnInit {
 
   constructor(private apiService: ApiService, private datePipe: DatePipe, private builder: FormBuilder) {
     this.controllerCommands = [];
@@ -58,9 +59,6 @@ export class NotifsFoodSafetyComponent implements OnInit {
   client: HttpClient;
   loading: boolean;
 
-
-  pageEvent: PageEvent;
-  setPageSize: number;
   setStartIndex: number;
   setEndIndex: number;
   columnsToDisplay = ['created', 'sender', 'labels', 'content'];
@@ -115,7 +113,7 @@ export class NotifsFoodSafetyComponent implements OnInit {
           } else {
             for (let i = 0; i < response.length; i++) {
               const myDate = new Date(response[i].created);
-              response[i].created = this.datePipe.transform(myDate, 'MM/dd/yyyy HH:mm:ss a')
+              response[i].created = this.datePipe.transform(myDate, 'MM/dd/yyyy HH:mm:ss a');
               this.dataSource.data[i] = response[i];
             }
             this.dataSource.paginator = this.paginator;

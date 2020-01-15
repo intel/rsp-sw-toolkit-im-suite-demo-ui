@@ -4,10 +4,9 @@
 *  SPDX-License-Identifier: Apache-2.0
 */
 
-// tslint:disable
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Injectable, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {NotifsFoodSafetyComponent} from './food-safety.component';
+import {NotifyFoodSafetyComponent} from './food-safety.component';
 import {ApiService} from '../../services/api.service';
 import {DatePipe} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -23,7 +22,7 @@ describe('NotifsFoodSafetyComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        NotifsFoodSafetyComponent
+        NotifyFoodSafetyComponent
       ],
       imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatTableModule],
       providers: [
@@ -32,7 +31,7 @@ describe('NotifsFoodSafetyComponent', () => {
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
-    fixture = TestBed.createComponent(NotifsFoodSafetyComponent);
+    fixture = TestBed.createComponent(NotifyFoodSafetyComponent);
     component = fixture.debugElement.componentInstance;
   });
 

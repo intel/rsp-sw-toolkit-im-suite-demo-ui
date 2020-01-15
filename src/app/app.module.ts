@@ -37,7 +37,7 @@ import { ApiService } from './services/api.service';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { TemperatureComponent } from './temperature/temperature.component';
 import { ChartsModule } from 'ng2-charts';
-import { NotifsFoodSafetyComponent} from './notifications/food-safety/food-safety.component';
+import { NotifyFoodSafetyComponent} from './notifications/food-safety/food-safety.component';
 import {AppConfigService} from './services/app-config-service';
 import {LossPreventionComponent} from './loss-prevention/loss-prevention.component';
 import {VideoViewerComponent} from './loss-prevention/video-viewer.component';
@@ -57,7 +57,7 @@ const appInitializer = (appConfig: AppConfigService) => {
     RFIDInventoryComponent,
     RFIDDashboardComponent,
     TemperatureComponent,
-    NotifsFoodSafetyComponent,
+    NotifyFoodSafetyComponent,
     LossPreventionComponent,
     VideoViewerComponent
   ],
