@@ -4,7 +4,7 @@
 *  SPDX-License-Identifier: Apache-2.0
 */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../../services/api.service';
@@ -15,7 +15,7 @@ import { Notification } from '../notification/notification';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import {CustomValidators} from '../../shared/custom-validators';
-// import { RFIDInventoryComponent } from '../../rfid/rfid-inventory.component';
+import { RFIDInventoryComponent } from '../../rfid/rfid-inventory.component';
 
 @Component({
   selector: 'app-food-safety',
@@ -39,6 +39,8 @@ export class NotifyFoodSafetyComponent implements OnInit {
     this.setStartIndex = 0;
     this.setEndIndex = 10;
   }
+
+  @Input() rfidInventory: RFIDInventoryComponent;
 
   get fromDate() { return this.filterForm.get('fromDate').value; }
   get toDate() {
@@ -90,7 +92,7 @@ export class NotifyFoodSafetyComponent implements OnInit {
     });
   }
 
-  addEvent(event: MatDatepickerInputEvent<Date>) {
+  addEvent(event: MatDatepickerInputEvent<any>) {
     this.dateEvents = `${event.value.getTime()}`;
 
     this.dataSource.filterPredicate = (data) => {
