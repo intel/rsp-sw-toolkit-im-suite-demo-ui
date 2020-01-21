@@ -44,31 +44,84 @@ describe('NotifyFoodSafetyComponent', () => {
     // const result = component.addEvent(event);
   });
 
-  it('should run #getNotifications()', async () => {
-    // const result = component.getNotifications();
-  });
-
-  it('should call submit method', async () => {
+  it('should call submit method by clicking the submit button', async () => {
     spyOn(component, 'submit');
     const button = fixture.debugElement.query(By.css('button'));
     button.triggerEventHandler('click', null);
     expect(component.submit).toHaveBeenCalled();
   });
 
-  it('from date field validity', async () => {
+  it('should test initial fromDate field validity', async () => {
     component.buildForm();
     const fromDate = component.filterForm.controls.fromDate;
     expect(fromDate.valid).toBeFalsy();
   });
 
-  it('to date field validity', async () => {
+  it('should test initial toDate field validity', async () => {
     component.buildForm();
     const toDate = component.filterForm.controls.toDate;
     expect(toDate.valid).toBeFalsy();
   });
 
-  it('should run #applyFilter()', async () => {
-    // const result = component.applyFilter();
+  it('should test initial sender field validity', async () => {
+    component.buildForm();
+    const sender = component.filterForm.controls.sender;
+    expect(sender.valid).toBeFalsy();
   });
 
+  it('should test sender field required validator', async () => {
+    component.buildForm();
+    const sender = component.filterForm.controls.sender;
+    expect(sender.errors.required).toBeTruthy();
+  });
+
+  it('should test fromDate field required validator', async () => {
+    component.buildForm();
+    const fromDate = component.filterForm.controls.fromDate;
+    expect(fromDate.errors.DateError).toBeTruthy();
+  });
+
+  it('should test toDate field required validator', async () => {
+    component.buildForm();
+    const toDate = component.filterForm.controls.toDate;
+    expect(toDate.errors.DateError).toBeTruthy();
+  });
+
+  it('should test toDate field required validator', async () => {
+    component.buildForm();
+    const toDate = component.filterForm.controls.toDate;
+    expect(toDate.errors.DateError).toBeTruthy();
+  });
+
+  it('should test whether toDate errors out with invalid input', async () => {
+    component.buildForm();
+    const toDate = component.filterForm.controls.toDate;
+    toDate.setValue('test')
+    expect(toDate.errors.DateError).toBeTruthy();
+  });
+
+  it('should test whether fromDate errors out with invalid input', async () => {
+    component.buildForm();
+    const fromDate = component.filterForm.controls.fromDate;
+    fromDate.setValue('test')
+    expect(fromDate.errors.DateError).toBeTruthy();
+  });
+
+  it('should test sender field max length validator', async () => {
+    component.buildForm();
+    const sender = component.filterForm.controls.sender;
+    sender.setValue('jfeghbrkfejgbrjtgrhtgjrehgjrehjkrehgjkrehkrejbhjkre')
+    expect(sender.errors.maxLength).not.toBeNull();
+    sender.setValue('test')
+    expect(sender.errors).toBeNull();
+  });
+
+  it('should test sender field pattern validator', async () => {
+    component.buildForm();
+    const sender = component.filterForm.controls.sender;
+    sender.setValue('test$')
+    expect(sender.errors.pattern).not.toBeNull();
+    sender.setValue('test')
+    expect(sender.errors).toBeNull();
+  });
 });
