@@ -11,11 +11,12 @@ import {ApiService} from '../../services/api.service';
 import {DatePipe} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule, MatTableModule} from '@angular/material';
+import {By} from '@angular/platform-browser';
 
 @Injectable()
 class MockApiService { }
 
-describe('NotifsFoodSafetyComponent', () => {
+describe('NotifyFoodSafetyComponent', () => {
   let fixture;
   let component;
 
@@ -32,19 +33,11 @@ describe('NotifsFoodSafetyComponent', () => {
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
     fixture = TestBed.createComponent(NotifyFoodSafetyComponent);
-    component = fixture.debugElement.componentInstance;
+    component = fixture.componentInstance;
   });
 
   it('should create a component', async () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should run #ngOnInit()', async () => {
-    // const result = component.ngOnInit();
-  });
-
-  it('should run #ngOnDestroy()', async () => {
-    // const result = component.ngOnDestroy();
   });
 
   it('should run #addEvent()', async () => {
@@ -55,8 +48,23 @@ describe('NotifsFoodSafetyComponent', () => {
     // const result = component.getNotifications();
   });
 
-  it('should run #submit()', async () => {
-    // const result = component.submit();
+  it('should call submit method', async () => {
+    spyOn(component, 'submit');
+    const button = fixture.debugElement.query(By.css('button'));
+    button.triggerEventHandler('click', null);
+    expect(component.submit).toHaveBeenCalled();
+  });
+
+  it('from date field validity', async () => {
+    component.buildForm();
+    const fromDate = component.filterForm.controls.fromDate;
+    expect(fromDate.valid).toBeFalsy();
+  });
+
+  it('to date field validity', async () => {
+    component.buildForm();
+    const toDate = component.filterForm.controls.toDate;
+    expect(toDate.valid).toBeFalsy();
   });
 
   it('should run #applyFilter()', async () => {
