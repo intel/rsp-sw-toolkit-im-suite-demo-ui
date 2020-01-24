@@ -5,7 +5,7 @@
 */
 
 import { TestBed } from '@angular/core/testing';
-import { Injectable, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {Injectable, CUSTOM_ELEMENTS_SCHEMA, EventEmitter} from '@angular/core';
 import {NotifyFoodSafetyComponent} from './food-safety.component';
 import {ApiService} from '../../services/api.service';
 import {DatePipe} from '@angular/common';
@@ -14,7 +14,9 @@ import {MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateMo
 import {By} from '@angular/platform-browser';
 
 @Injectable()
-class MockApiService { }
+class MockApiService {
+  myTempCommandsEventEmitter: EventEmitter<any[]> = new EventEmitter<any[]>();
+}
 
 describe('NotifyFoodSafetyComponent', () => {
   let fixture;
@@ -34,6 +36,7 @@ describe('NotifyFoodSafetyComponent', () => {
     }).compileComponents();
     fixture = TestBed.createComponent(NotifyFoodSafetyComponent);
     component = fixture.componentInstance;
+    component.ngOnInit();
   });
 
   it('should create a component', async () => {
@@ -49,79 +52,108 @@ describe('NotifyFoodSafetyComponent', () => {
     const button = fixture.debugElement.query(By.css('button'));
     button.triggerEventHandler('click', null);
     expect(component.submit).toHaveBeenCalled();
+    expect(component.filterForm).toBeTruthy();
   });
 
   it('should test initial fromDate field validity', async () => {
-    component.buildForm();
     const fromDate = component.filterForm.controls.fromDate;
     expect(fromDate.valid).toBeFalsy();
   });
 
   it('should test initial toDate field validity', async () => {
-    component.buildForm();
     const toDate = component.filterForm.controls.toDate;
     expect(toDate.valid).toBeFalsy();
   });
 
   it('should test initial sender field validity', async () => {
-    component.buildForm();
     const sender = component.filterForm.controls.sender;
     expect(sender.valid).toBeFalsy();
   });
 
   it('should test sender field required validator', async () => {
-    component.buildForm();
     const sender = component.filterForm.controls.sender;
     expect(sender.errors.required).toBeTruthy();
   });
 
   it('should test fromDate field required validator', async () => {
-    component.buildForm();
     const fromDate = component.filterForm.controls.fromDate;
     expect(fromDate.errors.DateError).toBeTruthy();
   });
 
   it('should test toDate field required validator', async () => {
-    component.buildForm();
     const toDate = component.filterForm.controls.toDate;
     expect(toDate.errors.DateError).toBeTruthy();
   });
 
   it('should test toDate field required validator', async () => {
-    component.buildForm();
     const toDate = component.filterForm.controls.toDate;
     expect(toDate.errors.DateError).toBeTruthy();
   });
 
   it('should test whether toDate errors out with invalid input', async () => {
-    component.buildForm();
     const toDate = component.filterForm.controls.toDate;
-    toDate.setValue('test')
+    toDate.setValue('test');
     expect(toDate.errors.DateError).toBeTruthy();
   });
 
   it('should test whether fromDate errors out with invalid input', async () => {
-    component.buildForm();
     const fromDate = component.filterForm.controls.fromDate;
-    fromDate.setValue('test')
+    fromDate.setValue('test');
     expect(fromDate.errors.DateError).toBeTruthy();
   });
 
   it('should test sender field max length validator', async () => {
-    component.buildForm();
     const sender = component.filterForm.controls.sender;
-    sender.setValue('jfeghbrkfejgbrjtgrhtgjrehgjrehjkrehgjkrehkrejbhjkre')
+    sender.setValue('jfeghbrkfejgbrjtgrhtgjrehgjrehjkrehgjkrehkrejbhjkre');
     expect(sender.errors.maxLength).not.toBeNull();
-    sender.setValue('test')
+    sender.setValue('test');
     expect(sender.errors).toBeNull();
   });
 
   it('should test sender field pattern validator', async () => {
-    component.buildForm();
     const sender = component.filterForm.controls.sender;
-    sender.setValue('test$')
+    sender.setValue('test$');
     expect(sender.errors.pattern).not.toBeNull();
-    sender.setValue('test')
+    sender.setValue('test');
     expect(sender.errors).toBeNull();
+  });
+
+  it('should test form validity with valid inputs', async () => {
+    expect(component.filterForm.valid).toBeFalsy();
+    component.filterForm.controls.sender.setValue('test');
+    component.filterForm.controls.fromDate.setValue('01/02/2019');
+    component.filterForm.controls.toDate.setValue('01/08/2019');
+    expect(component.filterForm.valid).toBeTruthy();
+    expect(component.fromDate).toBe('01/02/2019');
+    expect(component.sender).toBe('test');
+    expect(component.toDate.getDate).toBe(new Date('01/08/2019').getDate);
+  });
+
+  it('should test toDate()', async () => {
+    const toDateToTest = '01/08/2019';
+    component.filterForm.controls.sender.setValue('test');
+    component.filterForm.controls.fromDate.setValue('01/02/2019');
+    component.filterForm.controls.toDate.setValue(toDateToTest);
+    // should not match exactly as extra hours are added to match the end of day in the toDate()
+    expect(component.toDate.fromDate).not.toBe(new Date('01/08/2019'));
+    // should match if just date or day is compared instead of exact full date matching
+    expect(component.toDate.getDate).toBe(new Date(toDateToTest).getDate);
+  });
+
+  it('should test submit()', async () => {
+    component.submit();
+    spyOn(component, 'getNotifications');
+    spyOn(component, 'applyFilter');
+    expect(component.getNotifications).not.toHaveBeenCalled();
+    expect(component.applyFilter).not.toHaveBeenCalled();
+    component.filterForm.controls.sender.setValue('test');
+    component.filterForm.controls.fromDate.setValue('01/02/2019');
+    component.filterForm.controls.toDate.setValue('01/08/2019');
+    expect(component.filterForm.valid).toBeTruthy();
+    expect(component.dataSource.paginator).toBeFalsy();
+    component.submit();
+    // should be called as form is valid now
+    expect(component.getNotifications).toHaveBeenCalled();
+    expect(component.applyFilter).toHaveBeenCalled();
   });
 });
