@@ -4,8 +4,8 @@
 *  SPDX-License-Identifier: Apache-2.0
 */
 
-import { TestBed } from '@angular/core/testing';
-import {Injectable, CUSTOM_ELEMENTS_SCHEMA, EventEmitter} from '@angular/core';
+import {async, TestBed} from '@angular/core/testing';
+import {CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Injectable} from '@angular/core';
 import {NotifyFoodSafetyComponent} from './food-safety.component';
 import {ApiService} from '../../services/api.service';
 import {DatePipe} from '@angular/common';
@@ -22,7 +22,7 @@ describe('NotifyFoodSafetyComponent', () => {
   let fixture;
   let component;
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         NotifyFoodSafetyComponent
@@ -32,12 +32,12 @@ describe('NotifyFoodSafetyComponent', () => {
         {provide: ApiService, useClass: MockApiService},
         DatePipe,
       ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
     fixture = TestBed.createComponent(NotifyFoodSafetyComponent);
     component = fixture.componentInstance;
     component.ngOnInit();
-  });
+  }));
 
   it('should create a component', async () => {
     expect(component).toBeTruthy();
@@ -150,10 +150,36 @@ describe('NotifyFoodSafetyComponent', () => {
     component.filterForm.controls.fromDate.setValue('01/02/2019');
     component.filterForm.controls.toDate.setValue('01/08/2019');
     expect(component.filterForm.valid).toBeTruthy();
-    expect(component.dataSource.paginator).toBeFalsy();
     component.submit();
     // should be called as form is valid now
     expect(component.getNotifications).toHaveBeenCalled();
     expect(component.applyFilter).toHaveBeenCalled();
+    expect(component.dataSource.paginator).toBeFalsy();
   });
+
+  it('should test applyFilter()', async () => {
+    expect(component.dataSource).toBeTruthy();
+    expect(component.dataSource.filter).toEqual('');
+    component.applyFilter();
+    expect(component.dataSource.filter).toContain('randomValue');
+  });
+
+  /*it('should test addEvent()', async () => {
+    expect(component.dataSource).toBeTruthy();
+
+    /!*component.filterForm.controls.fromDate.setValue('01/02/2019');
+    component.filterForm.controls.toDate.setValue('01/08/2019');*!/
+
+    let testNotifications: Notification[];
+    testNotifications = [
+      {
+        created: '01-01-2020', modified: 2, id: 'test',
+        slug: 'test', sender: 'admin', category: 'test',
+        severity: 'test', content: 'test', status: 'test', labels: []}
+    ];
+    component.data = testNotifications;
+    console.log(component.dataSource.filterPredicate);
+    const result = component.addEvent(0);
+    console.log(result);
+  });*/
 });

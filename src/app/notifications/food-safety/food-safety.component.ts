@@ -73,7 +73,7 @@ export class NotifyFoodSafetyComponent implements OnInit {
 
   ngOnInit() {
     this.apiService.myTempCommandsEventEmitter.subscribe((val) => { });
-    this.dataSource = new MatTableDataSource();
+    this.dataSource = new MatTableDataSource<Notification>();
     this.buildForm();
 
   }
@@ -92,18 +92,19 @@ export class NotifyFoodSafetyComponent implements OnInit {
     });
   }
 
-  addEvent(event: MatDatepickerInputEvent<any>) {
-    this.dateEvents = `${event.value.getTime()}`;
+  addEvent(event: any) {
+    // this.dateEvents = `${event.value.getTime()}`;
 
     this.dataSource.filterPredicate = (data) => {
-      if (this.fromDate && this.toDate) {
-        return data.created >= this.datePipe.transform(this.fromDate + 1, 'MM/dd/yyyy HH:mm:ss a')
-          && data.created <= this.datePipe.transform(this.toDate, 'MM/dd/yyyy HH:mm:ss a');
-      }
-      return true;
+        if (this.fromDate && this.toDate) {
+          return data.created >= this.datePipe.transform(this.fromDate + 1, 'MM/dd/yyyy HH:mm:ss a')
+            && data.created <= this.datePipe.transform(this.toDate, 'MM/dd/yyyy HH:mm:ss a');
+        }
+        return true;
     };
 
   }
+
 
   getNotifications() {
     this.apiService.getNotifications(this.sender, 100)
@@ -134,6 +135,6 @@ export class NotifyFoodSafetyComponent implements OnInit {
   }
 
   applyFilter() {
-    this.dataSource.filter = '' + Math.random();
+    this.dataSource.filter = 'randomValue' + Math.random();
   }
 }
