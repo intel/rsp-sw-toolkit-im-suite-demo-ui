@@ -25,7 +25,7 @@
              [matDatepicker]="fromDate"
              placeholder="From Date"
              formControlName="fromDate"
-             (dateInput)="addEvent($event)">
+             (dateInput)="addEvent()">
       <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
       <mat-datepicker #fromDate></mat-datepicker>
       <mat-error *ngIf="filterForm.get('fromDate').hasError('DateError')">Must be valid date and format.</mat-error>
@@ -36,7 +36,7 @@
              [matDatepicker]="toDate"
              placeholder="To Date"
              formControlName="toDate"
-             (dateInput)="addEvent($event)">
+             (dateInput)="addEvent()">
       <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
       <mat-datepicker #toDate></mat-datepicker>
       <mat-error *ngIf="filterForm.get('toDate').hasError('DateError')">Must be valid date and format.</mat-error>

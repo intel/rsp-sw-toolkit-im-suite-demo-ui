@@ -92,17 +92,11 @@ export class NotifyFoodSafetyComponent implements OnInit {
     });
   }
 
-  addEvent(event: any) {
-    // this.dateEvents = `${event.value.getTime()}`;
-
+  addEvent() {
     this.dataSource.filterPredicate = (data) => {
-        if (this.fromDate && this.toDate) {
           return data.created >= this.datePipe.transform(this.fromDate + 1, 'MM/dd/yyyy HH:mm:ss a')
             && data.created <= this.datePipe.transform(this.toDate, 'MM/dd/yyyy HH:mm:ss a');
-        }
-        return true;
     };
-
   }
 
 
@@ -110,18 +104,22 @@ export class NotifyFoodSafetyComponent implements OnInit {
     this.apiService.getNotifications(this.sender, 100)
       .subscribe(
         (message) => {
-          const response: Notification[] = (JSON.parse(JSON.stringify(message)));
-          if (response.length === 0) {
-            this.dataSource.data = [];
-          } else {
-            for (let i = 0; i < response.length; i++) {
-              const myDate = new Date(response[i].created);
-              response[i].created = this.datePipe.transform(myDate, 'MM/dd/yyyy HH:mm:ss a');
-              this.dataSource.data[i] = response[i];
-            }
-            this.dataSource.paginator = this.paginator;
-          }
+          this.processNotifications(message);
         });
+  }
+
+  processNotifications(message: object) {
+    const response: Notification[] = (JSON.parse(JSON.stringify(message)));
+    if (response.length === 0) {
+      this.dataSource.data = [];
+    } else {
+      for (let i = 0; i < response.length; i++) {
+        const myDate = new Date(response[i].created);
+        response[i].created = this.datePipe.transform(myDate, 'MM/dd/yyyy HH:mm:ss a');
+        this.dataSource.data[i] = response[i];
+      }
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   submit() {
