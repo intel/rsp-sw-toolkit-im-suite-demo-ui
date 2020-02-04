@@ -140,17 +140,6 @@ describe('NotifyFoodSafetyComponent', () => {
     expect(component.toDate.getDate).toBe(new Date('01/08/2019').getDate);
   });
 
-  /*it('should test toDate()', async () => {
-    const toDateSet = '01/08/2019';
-    component.filterForm.controls.sender.setValue('test');
-    component.filterForm.controls.fromDate.setValue('01/02/2019');
-    component.filterForm.controls.toDate.setValue(toDateSet);
-    // should not match exactly as extra hours are added to match the end of day in the toDate()
-    expect(component.toDate).not.toBe(new Date('01/08/2019'));
-    // should match if just date or day is compared instead of exact full date matching
-    expect(component.toDate.getDate).toBe(new Date(toDateSet).getDate);
-  });*/
-
   it('should test submit()', async () => {
     component.submit();
     spyOn(component, 'getNotifications');
