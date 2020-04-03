@@ -25,7 +25,7 @@
              [matDatepicker]="fromDate"
              placeholder="From Date"
              formControlName="fromDate"
-             (dateInput)="addEvent($event)">
+             (dateInput)="addEvent()">
       <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
       <mat-datepicker #fromDate></mat-datepicker>
       <mat-error *ngIf="filterForm.get('fromDate').hasError('DateError')">Must be valid date and format.</mat-error>
@@ -36,7 +36,7 @@
              [matDatepicker]="toDate"
              placeholder="To Date"
              formControlName="toDate"
-             (dateInput)="addEvent($event)">
+             (dateInput)="addEvent()">
       <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
       <mat-datepicker #toDate></mat-datepicker>
       <mat-error *ngIf="filterForm.get('toDate').hasError('DateError')">Must be valid date and format.</mat-error>
@@ -66,17 +66,17 @@
                   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
                 </div>
                 <mat-list fxFlex=100 [fxShow]="!loading">
-                  <mat-list-item *ngFor="let sensorId of sensorIds;let i=index"
-                                 [ngClass]="{'active': isCurrentLocation(sensorId) === true}">
-                    <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === true">check_circle_outline</mat-icon>
-                    <mat-icon matListIcon *ngIf="isCurrentLocation(sensorId) === false">check_circle</mat-icon>
+                  <mat-list-item *ngFor="let sensorId of rfidInventory.sensorIds;let i=index"
+                                 [ngClass]="{'active': rfidInventory.isCurrentLocation(sensorId) === true}">
+                    <mat-icon matListIcon *ngIf="rfidInventory.isCurrentLocation(sensorId) === true">check_circle_outline</mat-icon>
+                    <mat-icon matListIcon *ngIf="rfidInventory.isCurrentLocation(sensorId) === false">check_circle</mat-icon>
                     <div fxLayout="row" fxFlexFill fxLayoutAlign="right center">
                       <div fxFlex=100>{{sensorId}}</div>
-                      <div fxFlex=30 fxFlexAlign="end end" *ngIf="i==0 && tempRead != ''"
+                      <div fxFlex=30 fxFlexAlign="end end" *ngIf="i==0 && rfidInventory.tempRead != ''"
                            style="font-weight: bold;text-align: right;margin-right:30px;">
                         <div fxLayout="row" fxLayoutAlign="center">
                           <img matListAvatar src="../assets/icons8-temperature-48.png" alt="">
-                          {{tempRead}}°F
+                          {{rfidInventory.tempRead}}°F
                         </div>
                       </div>
                     </div>
