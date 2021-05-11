@@ -1,6 +1,0 @@
-{
-  "_comment": "MAC address of BLE temperature sensor",
-  "temperatureDevice": "",
-  "_comment": "RSP Reader destination for Food safety tutorial",
-  "freezerReaderName" : "FREEZER"
-}
